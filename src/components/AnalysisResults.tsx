@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { AnalysisResult } from "@/types/analysis";
 import { PhaseBar } from "./PhaseBar";
 import { DrillCard } from "./DrillCard";
+import { ReportActions } from "./ReportActions";
 
 interface AnalysisResultsProps {
   analysis: AnalysisResult;
@@ -65,6 +66,9 @@ export function AnalysisResults({ analysis }: AnalysisResultsProps) {
           </div>
         )}
       </div>
+
+      {/* Report Actions */}
+      <ReportActions analysis={analysis} />
 
       {/* Tabs */}
       <div
