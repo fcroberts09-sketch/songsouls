@@ -71,8 +71,12 @@ WEEKLY PLAN GUIDELINES:
 - For high school (14-18): max 4-5 throwing days per week with proper recovery
 - Include dynamic warm-up before every session and cool-down/arm care after
 
+BEFORE DOING ANYTHING ELSE: Look at the frames and determine whether they actually show a baseball pitcher performing a pitching delivery. If the frames show anything other than a baseball pitcher (e.g., someone singing, dancing, playing a different sport, a landscape, an animal, etc.), you MUST set "is_valid_upload" to false and "invalid_reason" to a one-sentence description of what the video actually appears to show. In that case, still return the full JSON structure but with placeholder values for all other fields.
+
 Respond ONLY with a valid JSON object, no markdown backticks, no preamble. Use this exact structure:
 {
+  "is_valid_upload": true,
+  "invalid_reason": null,
   "overall_grade": "B+",
   "overall_summary": "2-3 sentence overall assessment of what you see in the frames",
   "pitcher_age_note": "note about age-appropriate expectations based on apparent age/size",

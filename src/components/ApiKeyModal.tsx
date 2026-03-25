@@ -34,6 +34,11 @@ export function ApiKeyModal({ onClose }: ApiKeyModalProps) {
   const [show, setShow] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  // Sync input when apiKey loads from localStorage (it starts as "" on first render)
+  useEffect(() => {
+    setInput(apiKey);
+  }, [apiKey]);
+
   const handleSave = () => {
     setApiKey(input);
     setSaved(true);

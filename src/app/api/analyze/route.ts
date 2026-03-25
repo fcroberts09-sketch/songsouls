@@ -252,6 +252,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // --- Reject non-pitching uploads ---
+    if (analysis.is_valid_upload === false) {
+      const reason = analysis.invalid_reason || "This doesn't appear to be a baseball pitching video.";
+      return NextResponse.json(
+        { success: false, error: `Invalid upload: ${reason} Please upload a video of a baseball pitcher.` },
+        { status: 400 }
+      );
+    }
+
     // --- Return success ---
     return NextResponse.json(
       { success: true, data: analysis },

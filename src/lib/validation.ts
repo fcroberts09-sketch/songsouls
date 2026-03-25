@@ -182,6 +182,8 @@ export function sanitizeAnalysis(raw: unknown): AnalysisResult | null {
   }
 
   return {
+    is_valid_upload: data.is_valid_upload !== false,
+    invalid_reason: data.invalid_reason != null ? String(data.invalid_reason).slice(0, 300) : null,
     overall_grade: String(data.overall_grade).slice(0, 5),
     overall_summary: String(data.overall_summary).slice(0, 1000),
     pitcher_age_note: String(data.pitcher_age_note || "").slice(0, 500),

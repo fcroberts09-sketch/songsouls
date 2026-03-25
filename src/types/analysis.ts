@@ -27,6 +27,8 @@ export interface DayPlan {
 }
 
 export interface AnalysisResult {
+  is_valid_upload?: boolean;
+  invalid_reason?: string | null;
   overall_grade: string;
   overall_summary: string;
   pitcher_age_note: string;
