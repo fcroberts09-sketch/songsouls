@@ -86,12 +86,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // --- Mock mode (no API key needed for local dev) ---
-    if (isMockMode()) {
-      await new Promise((r) => setTimeout(r, 1500)); // simulate processing delay
-      return NextResponse.json({ success: true, data: MOCK_ANALYSIS });
-    }
-
     // --- Parse and validate request body ---
     let body: unknown;
     try {
@@ -111,6 +105,15 @@ export async function POST(request: NextRequest) {
     }
 
     const { frames, clientApiKey } = body as { frames: unknown; clientApiKey?: unknown };
+
+    // --- Mock mode: only use if no server key AND no client key provided ---
+    // (Must parse body first so we can check for clientApiKey)
+    const hasClientKey = typeof clientApiKey === "string" && clientApiKey.startsWith("sk-ant-");
+    if (isMockMode() && !hasClientKey) {
+      await new Promise((r) => setTimeout(r, 1500)); // simulate processing delay
+      return NextResponse.json({ success: true, data: MOCK_ANALYSIS });
+    }
+
     const frameValidation = validateFrames(frames);
 
     if (!frameValidation.valid) {
