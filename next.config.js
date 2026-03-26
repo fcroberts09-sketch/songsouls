@@ -15,8 +15,8 @@ const nextConfig = {
             value: "DENY",
           },
           {
-            key: "X-XSS-Protection",
-            value: "1; mode=block",
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
           },
           {
             key: "Referrer-Policy",
@@ -26,6 +26,9 @@ const nextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
+          // Note: 'unsafe-eval' and 'unsafe-inline' are required by Next.js 14's
+          // production build. Consider upgrading to Next.js 15 for nonce-based CSP support.
+          // See: https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
           {
             key: "Content-Security-Policy",
             value: [

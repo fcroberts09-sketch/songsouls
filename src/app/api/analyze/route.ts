@@ -44,9 +44,18 @@ const MOCK_ANALYSIS = {
 // ---------------------------------------------------------------------------
 
 function getClientIP(request: NextRequest): string {
+  // Vercel sets x-real-ip which can't be spoofed by clients
+  const realIP = request.headers.get("x-real-ip");
+  if (realIP) return realIP;
+
+  // Use rightmost X-Forwarded-For (added by trusted proxy, not spoofable)
   const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0].trim();
-  return request.headers.get("x-real-ip") ?? "unknown";
+  if (forwarded) {
+    const ips = forwarded.split(",").map(ip => ip.trim());
+    return ips[ips.length - 1]; // rightmost = added by trusted proxy
+  }
+
+  return "unknown";
 }
 
 /** Returns the resolved API key, or null if none is available. */
