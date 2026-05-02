@@ -5,13 +5,13 @@ export default function PricingTiers() {
   const visible = VISIBLE_TIERS.map((id) => getTier(id)!).filter(Boolean);
 
   return (
-    <section id="pricing" className="py-24 px-6 relative">
+    <section id="pricing" className="py-16 sm:py-24 px-4 sm:px-6 relative scroll-mt-24">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 sm:mb-16">
           <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-3">
             How much
           </div>
-          <h2 className="font-display text-4xl md:text-5xl text-cream-100 mb-4">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-cream-100 mb-4">
             Choose how finished{" "}
             <span className="font-display-italic text-gold-shine">it should feel.</span>
           </h2>
@@ -20,11 +20,11 @@ export default function PricingTiers() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 items-stretch">
+        <div className="grid md:grid-cols-3 gap-5 sm:gap-6 items-stretch">
           {visible.map((tier) => (
             <div
               key={tier.id}
-              className={`relative rounded-2xl p-8 flex flex-col ${
+              className={`relative rounded-2xl p-6 sm:p-8 flex flex-col ${
                 tier.highlighted
                   ? "bg-gradient-to-b from-gold-500/15 via-ink-800/60 to-ink-900/60 border-2 border-gold-400/40 shadow-2xl shadow-gold-700/20"
                   : "card-deep"

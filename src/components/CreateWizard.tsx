@@ -84,10 +84,21 @@ export default function CreateWizard() {
 
   const goToStep = useCallback((next: StepKey) => {
     setStep(next);
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
   }, []);
+
+  // Scroll to top when the step changes. Runs after the new step has rendered,
+  // and uses an instant scroll so it works reliably on iOS Safari (smooth scrolls
+  // can be interrupted by the re-render or by html { scroll-behavior: smooth }).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    // Belt and suspenders for iOS Safari address-bar quirks where the first
+    // scrollTo can be ignored when the viewport size is recomputing.
+    const id = window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, [step]);
 
   const generateLyrics = useCallback(async () => {
     if (!genre) return;
@@ -234,7 +245,7 @@ export default function CreateWizard() {
 
   if (step === "success") {
     return (
-      <div className="min-h-screen pt-32 pb-20 px-6">
+      <div className="min-h-screen pt-24 sm:pt-32 pb-20 px-4 sm:px-6">
         <StepSuccess
           orderId={orderId}
           customerEmail={customerEmail}
@@ -248,10 +259,10 @@ export default function CreateWizard() {
   }
 
   return (
-    <div className="min-h-screen pt-28 pb-20 px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 px-4 sm:px-6">
       {/* Progress bar */}
-      <div className="max-w-3xl mx-auto mb-10">
-        <div className="flex items-center gap-2">
+      <div className="max-w-3xl mx-auto mb-8 sm:mb-10">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {STEP_ORDER.map((s, i) => (
             <div
               key={s}
@@ -264,7 +275,7 @@ export default function CreateWizard() {
         <div className="flex justify-between mt-2 text-xs text-cream-200/50">
           <span>Step {stepIndex + 1} of {totalSteps}</span>
           {genre && step !== "genre" && (
-            <span className="text-gold-300/80">{genre.name}</span>
+            <span className="text-gold-300/80 truncate ml-2 max-w-[55%] text-right">{genre.name}</span>
           )}
         </div>
       </div>
@@ -318,15 +329,15 @@ export default function CreateWizard() {
           />
         )}
 
-        {/* Nav buttons */}
-        <div className="max-w-3xl mx-auto mt-12 flex items-center justify-between gap-4">
+        {/* Nav buttons — stack on mobile so the primary CTA never gets squeezed */}
+        <div className="max-w-3xl mx-auto mt-10 sm:mt-12 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
           <button
             onClick={() => {
               const prev = STEP_ORDER[stepIndex - 1];
               if (prev) goToStep(prev);
               else router.push("/");
             }}
-            className="btn-ghost"
+            className="btn-ghost w-full sm:w-auto"
             disabled={submitting}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -335,12 +346,12 @@ export default function CreateWizard() {
             Back
           </button>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col-reverse sm:flex-row sm:items-center gap-3 w-full sm:w-auto">
             {step === "checkout" && lyrics && (
               <button
                 onClick={() => submitOrder("save-draft")}
                 disabled={submitting || !customerEmail.includes("@")}
-                className="text-sm text-cream-200/70 hover:text-gold-300 px-4 py-2 transition-colors"
+                className="text-sm text-cream-200/70 hover:text-gold-300 px-4 py-3 sm:py-2 transition-colors text-center"
               >
                 Just email me the draft
               </button>
@@ -350,7 +361,7 @@ export default function CreateWizard() {
               <button
                 onClick={() => submitOrder("checkout")}
                 disabled={submitting || !canAdvance}
-                className="btn-primary"
+                className="btn-primary w-full sm:w-auto text-sm sm:text-base"
               >
                 {submitting
                   ? "One moment…"
@@ -363,7 +374,7 @@ export default function CreateWizard() {
                   if (next) goToStep(next);
                 }}
                 disabled={!canAdvance}
-                className="btn-primary"
+                className="btn-primary w-full sm:w-auto"
               >
                 {step === "preview" ? "I love it — what's next?" : "Continue"}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

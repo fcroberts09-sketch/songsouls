@@ -29,11 +29,11 @@ export default function SongPage({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen pt-28 pb-24 px-6">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto">
         <Link
           href="/songs"
-          className="inline-flex items-center gap-2 text-sm text-cream-200/60 hover:text-gold-300 mb-10 group"
+          className="inline-flex items-center gap-2 text-sm text-cream-200/60 hover:text-gold-300 mb-8 sm:mb-10 group min-h-[44px] py-2"
         >
           <svg
             className="w-4 h-4 transition-transform group-hover:-translate-x-0.5"
@@ -47,7 +47,7 @@ export default function SongPage({ params }: PageProps) {
         </Link>
 
         {/* Hero — cover + title */}
-        <div className="grid md:grid-cols-2 gap-10 mb-14">
+        <div className="grid md:grid-cols-2 gap-8 sm:gap-10 mb-12 sm:mb-14">
           <div className="aspect-square rounded-2xl overflow-hidden card-deep relative">
             {song.coverImage ? (
               <img src={song.coverImage} alt="" className="w-full h-full object-cover" />
@@ -66,10 +66,10 @@ export default function SongPage({ params }: PageProps) {
             <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-3">
               {song.genre}
             </div>
-            <h1 className="font-display text-4xl md:text-5xl text-cream-100 mb-3">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-cream-100 mb-3">
               {song.title}
             </h1>
-            <p className="font-display-italic text-cream-200/70 text-lg mb-8">
+            <p className="font-display-italic text-cream-200/70 text-base sm:text-lg mb-6 sm:mb-8">
               {song.dedication}
             </p>
 
@@ -86,23 +86,23 @@ export default function SongPage({ params }: PageProps) {
         </div>
 
         {/* Story */}
-        <section className="mb-16">
+        <section className="mb-12 sm:mb-16">
           <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-3">
             The story
           </div>
-          <p className="font-display-italic text-2xl md:text-3xl text-cream-100 leading-relaxed">
+          <p className="font-display-italic text-xl sm:text-2xl md:text-3xl text-cream-100 leading-relaxed">
             "{song.story}"
           </p>
         </section>
 
         {/* Lyrics */}
         {song.lyrics?.trim() && (
-          <section className="mb-16">
+          <section className="mb-12 sm:mb-16">
             <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-4">
               The lyrics
             </div>
-            <div className="card-deep rounded-2xl p-8 md:p-12">
-              <pre className="font-display text-cream-100/95 leading-relaxed whitespace-pre-wrap text-lg">
+            <div className="card-deep rounded-2xl p-6 sm:p-8 md:p-12 overflow-x-auto">
+              <pre className="font-display text-cream-100/95 leading-relaxed whitespace-pre-wrap text-base sm:text-lg break-words">
                 {song.lyrics}
               </pre>
             </div>
@@ -111,8 +111,8 @@ export default function SongPage({ params }: PageProps) {
 
         {/* Recipient quote */}
         {song.recipientQuote && (
-          <section className="mb-16">
-            <div className="card-deep rounded-2xl p-8 md:p-12 text-center">
+          <section className="mb-12 sm:mb-16">
+            <div className="card-deep rounded-2xl p-6 sm:p-8 md:p-12 text-center">
               <svg
                 className="w-10 h-10 text-gold-400/40 mx-auto mb-5"
                 fill="currentColor"
@@ -120,7 +120,7 @@ export default function SongPage({ params }: PageProps) {
               >
                 <path d="M3 17l3-7H3V3h7v7l-3 7zm11 0l3-7h-3V3h7v7l-3 7z" />
               </svg>
-              <p className="font-display-italic text-xl md:text-2xl text-cream-100/90 leading-relaxed mb-4">
+              <p className="font-display-italic text-lg sm:text-xl md:text-2xl text-cream-100/90 leading-relaxed mb-4">
                 "{song.recipientQuote}"
               </p>
               {song.recipientQuoteAuthor && (
@@ -133,11 +133,11 @@ export default function SongPage({ params }: PageProps) {
         )}
 
         {/* CTA */}
-        <section className="text-center pt-8">
-          <h2 className="font-display text-3xl text-cream-100 mb-4">
+        <section className="text-center pt-4 sm:pt-8">
+          <h2 className="font-display text-2xl sm:text-3xl text-cream-100 mb-4">
             Want one for your person?
           </h2>
-          <p className="text-cream-200/60 mb-8 max-w-md mx-auto">
+          <p className="text-cream-200/60 mb-6 sm:mb-8 max-w-md mx-auto">
             The first verse is free. You only pay when it's worth keeping.
           </p>
           <Link href="/create" className="btn-primary">

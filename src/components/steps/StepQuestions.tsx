@@ -23,11 +23,11 @@ export default function StepQuestions({ genre, answers, setAnswer }: StepQuestio
         </p>
       </header>
 
-      <div className="max-w-2xl mx-auto space-y-6">
+      <div className="max-w-2xl mx-auto space-y-5 sm:space-y-6">
         {genre.questions.map((q, i) => (
-          <div key={q.id} className="card-deep rounded-xl p-5">
+          <div key={q.id} className="card-deep rounded-xl p-4 sm:p-5">
             <label className="block">
-              <div className="flex items-baseline gap-3 mb-1">
+              <div className="flex items-baseline gap-2.5 sm:gap-3 mb-1">
                 <span className="font-display text-gold-300 text-lg w-6 flex-shrink-0">
                   {String(i + 1).padStart(2, "0")}
                 </span>
@@ -37,11 +37,11 @@ export default function StepQuestions({ genre, answers, setAnswer }: StepQuestio
                 </span>
               </div>
               {q.helper && (
-                <p className="text-xs text-cream-200/50 ml-9 mb-3 leading-relaxed">
+                <p className="text-xs text-cream-200/50 ml-0 sm:ml-9 mt-2 mb-3 leading-relaxed">
                   {q.helper}
                 </p>
               )}
-              <div className="ml-9">
+              <div className="ml-0 sm:ml-9">
                 <textarea
                   value={answers[q.id] || ""}
                   onChange={(e) => setAnswer(q.id, e.target.value)}

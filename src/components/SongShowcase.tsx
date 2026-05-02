@@ -9,14 +9,14 @@ export default function SongShowcase() {
   if (!featured) return null;
 
   return (
-    <section className="py-24 px-6">
+    <section className="py-16 sm:py-24 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-end justify-between mb-12 gap-6 flex-wrap">
+        <div className="flex items-end justify-between mb-10 sm:mb-12 gap-4 sm:gap-6 flex-wrap">
           <div>
             <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-3">
               Recently written
             </div>
-            <h2 className="font-display text-4xl md:text-5xl text-cream-100">
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-cream-100">
               Songs from <span className="font-display-italic text-gold-shine">real lives.</span>
             </h2>
             <p className="mt-4 text-cream-200/60 max-w-xl">
@@ -25,7 +25,7 @@ export default function SongShowcase() {
           </div>
           <Link
             href="/songs"
-            className="text-sm text-gold-300 hover:text-gold-200 inline-flex items-center gap-2 group"
+            className="text-sm text-gold-300 hover:text-gold-200 inline-flex items-center gap-2 group min-h-[44px] py-2"
           >
             See the full library
             <svg
@@ -39,12 +39,12 @@ export default function SongShowcase() {
           </Link>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {/* Featured song */}
           <SongCard song={featured} variant="feature" />
 
           {/* Grid of others */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {rest.map((song) => (
               <SongCard key={song.slug} song={song} />
             ))}

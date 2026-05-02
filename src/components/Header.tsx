@@ -29,8 +29,8 @@ export default function Header() {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5 group">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2.5 group min-h-[44px]">
           <Logo />
           <span className="font-display text-xl tracking-tight text-cream-100 group-hover:text-gold-200 transition-colors">
             {brand.name}
@@ -56,9 +56,10 @@ export default function Header() {
         </nav>
 
         <button
-          className="md:hidden p-2 text-cream-100"
+          className="md:hidden -mr-2 p-3 text-cream-100 inline-flex items-center justify-center min-w-[44px] min-h-[44px]"
           onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -73,13 +74,13 @@ export default function Header() {
 
       {open && (
         <div className="md:hidden border-t border-gold-700/15 bg-ink-950/95 backdrop-blur-xl">
-          <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-4">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-2 flex flex-col">
             {links.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="text-cream-200/90 hover:text-gold-200"
+                className="text-cream-200/90 hover:text-gold-200 py-3 min-h-[44px] flex items-center"
               >
                 {l.label}
               </Link>
@@ -87,7 +88,7 @@ export default function Header() {
             <Link
               href="/create"
               onClick={() => setOpen(false)}
-              className="btn-primary w-fit"
+              className="btn-primary w-full justify-center my-3"
             >
               Begin a song
             </Link>

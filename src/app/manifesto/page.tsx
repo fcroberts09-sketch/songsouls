@@ -8,18 +8,18 @@ export const metadata = {
 
 export default function ManifestoPage() {
   return (
-    <article className="min-h-screen pt-32 pb-24 px-6">
+    <article className="min-h-screen pt-24 sm:pt-32 pb-20 sm:pb-24 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto">
-        <header className="text-center mb-16">
+        <header className="text-center mb-12 sm:mb-16">
           <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-3">
             Manifesto
           </div>
-          <h1 className="font-display text-5xl md:text-6xl text-cream-100">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-cream-100">
             Why we <span className="font-display-italic text-gold-shine">make these.</span>
           </h1>
         </header>
 
-        <div className="font-display text-xl md:text-2xl text-cream-100/90 leading-relaxed space-y-8">
+        <div className="font-display text-lg sm:text-xl md:text-2xl text-cream-100/90 leading-relaxed space-y-6 sm:space-y-8">
           <p>
             People we love die. People we love grow up and move out. People we love stop being people we love. Some of them never knew, when they had us, what they meant.
           </p>
@@ -45,7 +45,7 @@ export default function ManifestoPage() {
           </p>
         </div>
 
-        <section className="card-deep rounded-2xl p-8 md:p-10 mt-20">
+        <section className="card-deep rounded-2xl p-6 sm:p-8 md:p-10 mt-16 sm:mt-20">
           <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-4">
             From the founder
           </div>
@@ -78,7 +78,7 @@ export default function ManifestoPage() {
           </div>
         </section>
 
-        <div className="mt-20 text-center">
+        <div className="mt-16 sm:mt-20 text-center">
           <Link href="/create" className="btn-primary">
             Begin a song
           </Link>

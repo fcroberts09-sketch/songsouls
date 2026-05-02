@@ -131,10 +131,10 @@ export default function StepPhotos({ photos, setPhotos }: StepPhotosProps) {
             setDragging(false);
             handleFiles(e.dataTransfer.files);
           }}
-          className={`relative cursor-pointer rounded-2xl border-2 border-dashed transition-all p-10 text-center ${
+          className={`relative cursor-pointer rounded-2xl border-2 border-dashed transition-all p-8 sm:p-10 text-center ${
             dragging
               ? "border-gold-400 bg-gold-400/10"
-              : "border-cream-100/15 hover:border-cream-100/30 bg-ink-900/40"
+              : "border-cream-100/15 hover:border-cream-100/30 bg-ink-900/40 active:bg-ink-900/60"
           }`}
         >
           <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gold-400/10 flex items-center justify-center">
@@ -153,9 +153,16 @@ export default function StepPhotos({ photos, setPhotos }: StepPhotosProps) {
             </svg>
           </div>
           <p className="text-cream-100 font-medium">
-            {dragging ? "Drop them here" : "Drag photos here, or click to browse"}
+            {dragging ? (
+              "Drop them here"
+            ) : (
+              <>
+                <span className="hidden sm:inline">Drag photos here, or click to browse</span>
+                <span className="sm:hidden">Tap to add photos</span>
+              </>
+            )}
           </p>
-          <p className="text-xs text-cream-200/45 mt-1">
+          <p className="text-xs text-cream-200/45 mt-1 px-2">
             JPG, PNG, WEBP &middot; up to 6MB each &middot; up to {MAX_PHOTOS} photos
           </p>
 
@@ -192,10 +199,10 @@ export default function StepPhotos({ photos, setPhotos }: StepPhotosProps) {
                   <img src={p.src} alt={p.filename || `photo ${i + 1}`} className="w-full h-full object-cover" />
                   <button
                     onClick={() => removePhoto(i)}
-                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-ink-950/80 backdrop-blur-sm border border-cream-100/20 text-cream-100 hover:bg-rose-500/80 flex items-center justify-center transition-colors"
+                    className="absolute top-2 right-2 w-11 h-11 rounded-full bg-ink-950/80 backdrop-blur-sm border border-cream-100/20 text-cream-100 hover:bg-rose-500/80 flex items-center justify-center transition-colors"
                     aria-label="Remove photo"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
@@ -207,7 +214,6 @@ export default function StepPhotos({ photos, setPhotos }: StepPhotosProps) {
                     onChange={(e) => updateCaption(i, e.target.value)}
                     placeholder="Caption (optional) — who, when, where"
                     maxLength={200}
-                    className="text-sm"
                   />
                 </div>
               </div>

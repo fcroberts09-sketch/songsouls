@@ -51,7 +51,7 @@ export default function SongCard({ song, variant = "default" }: SongCardProps) {
       </Link>
 
       {/* Body */}
-      <div className={`p-6 ${isFeature ? "md:w-1/2 md:p-10 md:flex md:flex-col md:justify-center" : ""}`}>
+      <div className={`p-5 sm:p-6 ${isFeature ? "md:w-1/2 md:p-10 md:flex md:flex-col md:justify-center" : ""}`}>
         <Link href={`/songs/${song.slug}`} className="group">
           <h3
             className={`font-display text-cream-100 group-hover:text-gold-200 transition-colors ${
@@ -79,7 +79,7 @@ export default function SongCard({ song, variant = "default" }: SongCardProps) {
         {isFeature && (
           <Link
             href={`/songs/${song.slug}`}
-            className="inline-flex items-center gap-2 text-sm text-gold-300 hover:text-gold-200 mt-6 group"
+            className="inline-flex items-center gap-2 text-sm text-gold-300 hover:text-gold-200 mt-6 group min-h-[44px] py-2"
           >
             Read the story
             <svg

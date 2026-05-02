@@ -11,19 +11,19 @@ interface StepGenreProps {
 export default function StepGenre({ value, onSelect }: StepGenreProps) {
   return (
     <div>
-      <header className="mb-10 text-center">
+      <header className="mb-8 sm:mb-10 text-center">
         <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-3">
           Step 1 of 5
         </div>
         <h2 className="font-display text-3xl md:text-5xl text-cream-100 mb-4">
           What kind of song?
         </h2>
-        <p className="text-cream-200/60 max-w-lg mx-auto">
+        <p className="text-cream-200/60 max-w-lg mx-auto px-2">
           Pick whatever fits. We'll ask the right questions next.
         </p>
       </header>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {GENRES.map((genre) => {
           const accent = ACCENT_CLASSES[genre.accent];
           const selected = value === genre.id;
@@ -31,10 +31,10 @@ export default function StepGenre({ value, onSelect }: StepGenreProps) {
             <button
               key={genre.id}
               onClick={() => onSelect(genre.id)}
-              className={`text-left rounded-2xl p-6 transition-all relative overflow-hidden border ${
+              className={`text-left rounded-2xl p-5 sm:p-6 transition-all relative overflow-hidden border ${
                 selected
                   ? "border-gold-400/60 bg-gradient-to-b from-gold-500/10 to-transparent ring-2 ring-gold-400/30"
-                  : "border-cream-100/10 bg-ink-900/50 hover:border-cream-100/25 hover:bg-ink-800/40"
+                  : "border-cream-100/10 bg-ink-900/50 hover:border-cream-100/25 hover:bg-ink-800/40 active:bg-ink-800/60"
               }`}
             >
               <div

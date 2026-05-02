@@ -78,7 +78,7 @@ export default function StepPreview({ loading, error, lyrics, onRegenerate }: St
             <div className="mt-6 flex items-center justify-center">
               <button
                 onClick={onRegenerate}
-                className="text-sm text-cream-200/60 hover:text-gold-300 inline-flex items-center gap-2"
+                className="text-sm text-cream-200/60 hover:text-gold-300 inline-flex items-center gap-2 px-4 py-3 min-h-[44px] rounded-full"
               >
                 <svg
                   className="w-4 h-4"

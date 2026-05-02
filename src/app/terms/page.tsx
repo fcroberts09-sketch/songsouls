@@ -10,13 +10,13 @@ const EFFECTIVE_DATE = "May 2, 2026";
 
 export default function TermsPage() {
   return (
-    <article className="min-h-screen pt-32 pb-24 px-6">
+    <article className="min-h-screen pt-24 sm:pt-32 pb-20 sm:pb-24 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto">
-        <header className="mb-14">
+        <header className="mb-12 sm:mb-14">
           <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-3">
             Legal
           </div>
-          <h1 className="font-display text-4xl md:text-5xl text-cream-100 mb-4">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-cream-100 mb-4">
             Terms of <span className="font-display-italic text-gold-shine">Service</span>
           </h1>
           <p className="text-cream-200/55 text-sm">

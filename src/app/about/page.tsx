@@ -8,22 +8,22 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen pt-32 pb-24 px-6">
+    <div className="min-h-screen pt-24 sm:pt-32 pb-20 sm:pb-24 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto">
-        <header className="text-center mb-14">
+        <header className="text-center mb-12 sm:mb-14">
           <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-3">
             For practitioners
           </div>
-          <h1 className="font-display text-4xl md:text-6xl text-cream-100 mb-5">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-cream-100 mb-4 sm:mb-5">
             Songs that{" "}
             <span className="font-display-italic text-gold-shine">do clinical work.</span>
           </h1>
-          <p className="text-cream-200/65 text-lg leading-relaxed max-w-xl mx-auto">
+          <p className="text-cream-200/65 text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
             Therapists are using SongSouls in grief work, inner-child work, and milestone-of-life work. If you're a clinician — we want to talk.
           </p>
         </header>
 
-        <section className="card-deep rounded-2xl p-8 md:p-10 mb-10">
+        <section className="card-deep rounded-2xl p-6 sm:p-8 md:p-10 mb-8 sm:mb-10">
           <h2 className="font-display text-2xl text-cream-100 mb-5">Where it fits in practice</h2>
           <ul className="space-y-4 text-cream-200/80">
             <li className="flex gap-3">
@@ -53,7 +53,7 @@ export default function AboutPage() {
           </ul>
         </section>
 
-        <section className="card-deep rounded-2xl p-8 md:p-10 mb-10">
+        <section className="card-deep rounded-2xl p-6 sm:p-8 md:p-10 mb-8 sm:mb-10">
           <h2 className="font-display text-2xl text-cream-100 mb-5">Practitioner program</h2>
           <p className="text-cream-200/75 mb-5 leading-relaxed">
             We're piloting a practitioner program for licensed clinicians: a per-client rate, an intake template you can use in session, and a referral pathway for clients who want to take it further on their own.
@@ -67,8 +67,8 @@ export default function AboutPage() {
           </p>
         </section>
 
-        <div className="text-center">
-          <Link href="/create" className="btn-ghost mr-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 max-w-sm mx-auto sm:max-w-none">
+          <Link href="/create" className="btn-ghost">
             Try it yourself first
           </Link>
           <a href={`mailto:${brand.contact.email}?subject=Practitioner program`} className="btn-primary">

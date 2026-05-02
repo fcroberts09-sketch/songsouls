@@ -23,23 +23,23 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section className="py-24 px-6 relative">
+    <section className="py-16 sm:py-24 px-4 sm:px-6 relative">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 sm:mb-16">
           <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-3">
             How it works
           </div>
-          <h2 className="font-display text-4xl md:text-5xl text-cream-100">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-cream-100">
             Four steps,{" "}
             <span className="font-display-italic text-gold-shine">one song that lasts.</span>
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {steps.map((step, i) => (
             <div
               key={step.n}
-              className="card-deep card-deep-hover rounded-2xl p-7 relative overflow-hidden"
+              className="card-deep card-deep-hover rounded-2xl p-6 sm:p-7 relative overflow-hidden"
               style={{ animationDelay: `${i * 80}ms` }}
             >
               <div className="font-display text-5xl text-gold-400/20 mb-4">{step.n}</div>

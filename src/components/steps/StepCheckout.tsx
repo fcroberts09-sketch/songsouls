@@ -43,17 +43,17 @@ export default function StepCheckout(props: StepCheckoutProps) {
       </header>
 
       <div className="max-w-3xl mx-auto">
-        <div className="grid md:grid-cols-3 gap-4 mb-10">
+        <div className="grid md:grid-cols-3 gap-3 sm:gap-4 mb-8 sm:mb-10">
           {visible.map((tier) => {
             const isSelected = selectedTier === tier.id;
             return (
               <button
                 key={tier.id}
                 onClick={() => setSelectedTier(tier.id)}
-                className={`text-left rounded-2xl p-5 transition-all border-2 ${
+                className={`text-left rounded-2xl p-4 sm:p-5 transition-all border-2 ${
                   isSelected
                     ? "border-gold-400 bg-gradient-to-b from-gold-500/15 to-transparent"
-                    : "border-cream-100/10 bg-ink-900/50 hover:border-cream-100/25"
+                    : "border-cream-100/10 bg-ink-900/50 hover:border-cream-100/25 active:bg-ink-900/70"
                 }`}
               >
                 {tier.highlighted && (
@@ -81,7 +81,7 @@ export default function StepCheckout(props: StepCheckoutProps) {
           })}
         </div>
 
-        <div className="card-deep rounded-2xl p-6 md:p-8 space-y-5">
+        <div className="card-deep rounded-2xl p-5 sm:p-6 md:p-8 space-y-5">
           <h3 className="font-display text-xl text-cream-100">Where do we send it?</h3>
 
           <div className="grid sm:grid-cols-2 gap-4">

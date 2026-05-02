@@ -3,7 +3,7 @@ import { brand } from "@/lib/brand";
 
 export default function Hero() {
   return (
-    <section className="relative pt-40 pb-32 overflow-hidden">
+    <section className="relative pt-32 sm:pt-40 pb-20 sm:pb-32 overflow-hidden">
       {/* Ambient candle glows */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] rounded-full bg-gold-400/10 blur-3xl animate-soft-pulse" />
@@ -17,18 +17,19 @@ export default function Hero() {
         />
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 text-center relative">
-        {/* Eyebrow */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative">
+        {/* Eyebrow — collapses to a shorter form on phones to avoid awkward wraps */}
         <div
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-400/8 border border-gold-400/20 text-xs text-gold-200 tracking-widest uppercase mb-8 animate-fade-in"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-400/8 border border-gold-400/20 text-[10px] sm:text-xs text-gold-200 tracking-widest uppercase mb-6 sm:mb-8 animate-fade-in max-w-full"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-gold-400 animate-soft-pulse" />
-          Personalized songs · written by hand, performed in studio
+          <span className="w-1.5 h-1.5 rounded-full bg-gold-400 animate-soft-pulse flex-shrink-0" />
+          <span className="hidden sm:inline">Personalized songs · written by hand, performed in studio</span>
+          <span className="sm:hidden">Written by hand · performed in studio</span>
         </div>
 
         {/* Headline */}
         <h1
-          className="font-display text-5xl md:text-7xl lg:text-[5.5rem] text-cream-100 mb-6 animate-fade-up"
+          className="font-display text-[2.5rem] leading-[1.05] sm:text-5xl md:text-7xl lg:text-[5.5rem] text-cream-100 mb-5 sm:mb-6 animate-fade-up"
           style={{ animationDelay: "0.1s" }}
         >
           The people you love,{" "}
@@ -36,7 +37,7 @@ export default function Hero() {
         </h1>
 
         <p
-          className="text-lg md:text-xl text-cream-200/70 max-w-2xl mx-auto leading-relaxed mb-10 animate-fade-up"
+          className="text-base sm:text-lg md:text-xl text-cream-200/70 max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-10 animate-fade-up"
           style={{ animationDelay: "0.25s" }}
         >
           {brand.description}
@@ -44,7 +45,7 @@ export default function Hero() {
 
         {/* CTAs */}
         <div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 animate-fade-up max-w-sm sm:max-w-none mx-auto"
           style={{ animationDelay: "0.4s" }}
         >
           <Link href="/create" className="btn-primary text-base">
@@ -68,7 +69,7 @@ export default function Hero() {
 
         {/* Subtle trust line */}
         <p
-          className="mt-12 text-sm text-cream-200/40 animate-fade-up"
+          className="mt-10 sm:mt-12 text-sm text-cream-200/40 animate-fade-up px-2"
           style={{ animationDelay: "0.55s" }}
         >
           No card required to draft. Pay only when you love what we wrote.
