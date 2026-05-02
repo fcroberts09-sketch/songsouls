@@ -1,0 +1,202 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-serif: "Fraunces", "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #070416;
+  background-image:
+    radial-gradient(ellipse at 50% -20%, rgba(31, 23, 66, 0.8) 0%, rgba(7, 4, 22, 0) 50%),
+    radial-gradient(ellipse at 100% 50%, rgba(169, 109, 29, 0.06) 0%, rgba(7, 4, 22, 0) 40%);
+  color: #fbf6e8;
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0820;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2057;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a2f7a;
+}
+
+/* Selection */
+::selection {
+  background: rgba(224, 169, 63, 0.35);
+  color: #fefcf7;
+}
+
+/* Subtle film grain — adds depth to the dark theme */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.025;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='1'/></svg>");
+}
+
+/* Soft glow utility for hero candles */
+.glow-warm {
+  box-shadow: 0 0 60px 0 rgba(224, 169, 63, 0.18), 0 0 120px 0 rgba(169, 109, 29, 0.08);
+}
+
+/* Display serif for hero headlines */
+.font-display {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+
+.font-display-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.005em;
+}
+
+/* Gold gradient text */
+.text-gold-shine {
+  background: linear-gradient(135deg, #fbefcf 0%, #e0a93f 50%, #c98e26 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Subtle inner shadow for cards */
+.card-deep {
+  background: linear-gradient(180deg, rgba(31, 23, 66, 0.5) 0%, rgba(13, 8, 32, 0.6) 100%);
+  border: 1px solid rgba(224, 169, 63, 0.12);
+  backdrop-filter: blur(10px);
+}
+
+.card-deep-hover {
+  transition: all 0.3s ease-out;
+}
+.card-deep-hover:hover {
+  border-color: rgba(224, 169, 63, 0.32);
+  transform: translateY(-2px);
+}
+
+/* Button base */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #e0a93f 0%, #c98e26 100%);
+  color: #070416;
+  font-weight: 600;
+  border-radius: 9999px;
+  transition: all 0.2s ease-out;
+  box-shadow: 0 4px 24px -6px rgba(224, 169, 63, 0.5);
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 28px -4px rgba(224, 169, 63, 0.6);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: #fbf6e8;
+  font-weight: 500;
+  border-radius: 9999px;
+  border: 1px solid rgba(251, 246, 232, 0.2);
+  transition: all 0.2s ease-out;
+}
+.btn-ghost:hover {
+  background: rgba(251, 246, 232, 0.05);
+  border-color: rgba(251, 246, 232, 0.35);
+}
+
+/* Range/textarea styling */
+textarea,
+input[type="text"],
+input[type="email"],
+input[type="date"],
+select {
+  background: rgba(13, 8, 32, 0.7);
+  border: 1px solid rgba(251, 246, 232, 0.12);
+  color: #fbf6e8;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  font-family: var(--font-sans);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+textarea:focus,
+input:focus,
+select:focus {
+  outline: none;
+  border-color: rgba(224, 169, 63, 0.5);
+  box-shadow: 0 0 0 3px rgba(224, 169, 63, 0.12);
+}
+textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.6;
+}
+textarea::placeholder,
+input::placeholder {
+  color: rgba(251, 246, 232, 0.35);
+}
+
+/* Loading shimmer */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(251, 246, 232, 0.04) 25%,
+    rgba(251, 246, 232, 0.12) 50%,
+    rgba(251, 246, 232, 0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer-bg 1.6s ease-in-out infinite;
+}
+@keyframes shimmer-bg {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Audio player styling — used on song showcase */
+audio {
+  width: 100%;
+  filter: invert(0.92) hue-rotate(180deg);
+}
