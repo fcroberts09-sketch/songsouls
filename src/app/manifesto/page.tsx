@@ -44,6 +44,29 @@ export default function ManifestoPage() {
           </p>
         </div>
 
+        <section className="card-deep rounded-2xl p-8 md:p-10 mt-20">
+          <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-4">
+            From the founder
+          </div>
+          <h2 className="font-display text-3xl text-cream-100 mb-6">
+            Why I made this
+          </h2>
+          <div className="space-y-5 text-cream-200/85 leading-relaxed text-[17px]">
+            <p>
+              We created this because I stumbled across some AI song generation software that could turn what you&rsquo;ve written into music.
+            </p>
+            <p>
+              I had been journaling about the loss of my father for many years &mdash; random thoughts, how I felt, the things that were real, my memories, the sadness. But I don&rsquo;t think it had ever really been a focus. I&rsquo;ve never really known how I felt, and I always landed in the same place.
+            </p>
+            <p>
+              Last year, while I was hiking and journaling, it hit me &mdash; you can&rsquo;t miss something you never knew. I always landed on this &mdash; you can&rsquo;t have sadness for someone you never knew, you can&rsquo;t miss someone you never knew. And that&rsquo;s tragic and sad.
+            </p>
+            <p>
+              For me, songs are about finding another way to connect with things you may not even know you feel. I&rsquo;ll share a very intimate song that has really uplifted my life and given me a freedom of emotion and feeling that I didn&rsquo;t know I could have. That&rsquo;s what pushed me to create this.
+            </p>
+          </div>
+        </section>
+
         <div className="mt-20 text-center">
           <Link href="/create" className="btn-primary">
             Begin a song
