@@ -21,6 +21,9 @@ export default function AboutPage() {
           <p className="text-cream-200/65 text-lg leading-relaxed max-w-xl mx-auto">
             Therapists are using SongSouls in grief work, inner-child work, and milestone-of-life work. If you're a clinician — we want to talk.
           </p>
+          <p className="mt-5 text-sm text-cream-200/50 max-w-xl mx-auto">
+            How we make them: a songwriter writes the lyrics from the client's intake, then we produce the audio with AI-assisted vocals and instrumentation. No live musicians, no studio recording.
+          </p>
         </header>
 
         <section className="card-deep rounded-2xl p-8 md:p-10 mb-10">

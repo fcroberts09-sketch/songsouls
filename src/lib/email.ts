@@ -145,7 +145,7 @@ function orderToCustomerEmail(order: Order): string {
 
         <p>You'll hear from us within <strong>${escapeHtml(turnaround)}</strong> with your finished song.</p>
 
-        ${order.tierId === "life-album" ? `<p>Because you chose our <em>Life Album</em>, we'll be in touch within 48 hours to schedule your 1-on-1 consultation. The album takes shape from that conversation.</p>` : ""}
+        ${order.tierId === "keepsake" ? `<p>Because you chose <em>Keepsake</em>, you'll receive two song variations and a designed lyrics PDF. We'll have the first version to you within 48 hours.</p>` : ""}
 
         <p style="margin-top: 32px; font-style: italic; color: #5c391d;">Songs are how the people we love stay close. Thank you for letting us be part of yours.</p>
 

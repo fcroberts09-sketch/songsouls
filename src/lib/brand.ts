@@ -9,7 +9,7 @@ export const brand = {
   domain: "songsouls.ai",
   tagline: "The people you love, set to music.",
   promise:
-    "Personalized songs — written from your story, performed for the soul that shaped yours.",
+    "Personalized songs — written from your story, produced with AI-assisted vocals and instrumentation.",
   description:
     "SongSouls turns the people, places, and moments that made you into a song you can keep forever. For loved ones lost, partners loved long, children grown, and the version of yourself still finding the words.",
   voice: {

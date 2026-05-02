@@ -23,7 +23,7 @@ export default function Hero() {
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-400/8 border border-gold-400/20 text-xs text-gold-200 tracking-widest uppercase mb-8 animate-fade-in"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-gold-400 animate-soft-pulse" />
-          Personalized songs · written by hand, performed in studio
+          Personalized songs · written from your story · produced with AI
         </div>
 
         {/* Headline */}
@@ -66,12 +66,12 @@ export default function Hero() {
           </Link>
         </div>
 
-        {/* Subtle trust line */}
+        {/* Soft disclosure */}
         <p
-          className="mt-12 text-sm text-cream-200/40 animate-fade-up"
+          className="mt-12 text-sm text-cream-200/45 max-w-xl mx-auto animate-fade-up"
           style={{ animationDelay: "0.55s" }}
         >
-          No card required to draft. Pay only when you love what we wrote.
+          Each song is written by a songwriter from your story, then produced with AI-assisted vocals and instrumentation.
         </p>
       </div>
     </section>

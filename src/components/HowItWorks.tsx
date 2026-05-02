@@ -6,18 +6,18 @@ const steps = [
   },
   {
     n: "02",
-    title: "See the lyrics, free",
-    body: "Our AI drafts the first verse and chorus from your story — instantly, in your voice. No card required. If it doesn't move you, you don't pay.",
+    title: "Pick your tier and pay",
+    body: "$99 Standard — one song, MP3, lyrics on your song page, delivered in 7 days. $179 Keepsake — two variations, designed lyrics PDF, extended length, 48-hour rush.",
   },
   {
     n: "03",
-    title: "Pick how finished you want it",
-    body: "$39 for an AI-crafted full song with studio audio. $129 for a real songwriter to shape it. $500 for a Life Album — eight songs, one story, one consultation, an arc.",
+    title: "We write your song",
+    body: "A songwriter writes the lyrics from your intake — every line, every detail. We then produce the audio with AI-assisted vocals and instrumentation.",
   },
   {
     n: "04",
-    title: "We deliver in 24 hours",
-    body: "MP3, lyric sheet, and a quiet note from us — in your inbox. One free revision if it's not quite right. Then play it for the person it's for.",
+    title: "Delivered to your inbox",
+    body: "MP3 + lyrics + a quiet note from us. One free revision if something needs to land differently. Then play it for the person it's for.",
   },
 ];
 

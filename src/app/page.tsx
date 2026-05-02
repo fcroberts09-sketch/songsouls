@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import SongShowcase from "@/components/SongShowcase";
+import WhyWeExist from "@/components/WhyWeExist";
 import HowItWorks from "@/components/HowItWorks";
 import PricingTiers from "@/components/PricingTiers";
 import Testimonials from "@/components/Testimonials";
@@ -10,6 +11,7 @@ export default function HomePage() {
     <>
       <Hero />
       <SongShowcase />
+      <WhyWeExist />
       <HowItWorks />
       <PricingTiers />
       <Testimonials />

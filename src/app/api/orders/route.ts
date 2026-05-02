@@ -5,11 +5,15 @@ import {
   isValidPhotoDataUrl,
   safeString,
 } from "@/lib/validation";
-import { saveOrder, updateOrder, generateOrderId } from "@/lib/orders";
+import { saveOrder, generateOrderId } from "@/lib/orders";
 import { notifyNewOrder } from "@/lib/email";
 import { getGenre } from "@/lib/genres";
 import { getTier } from "@/lib/pricing";
 import { generateLyrics } from "@/lib/lyrics";
+import {
+  createOrder as createDbOrder,
+  updateOrder as updateDbOrder,
+} from "@/lib/db";
 import type { Order, IntakeAnswer, UploadedPhoto } from "@/types/order";
 
 function getClientIp(request: NextRequest): string {
@@ -126,10 +130,32 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Write the draft to Postgres first so we can use its order_number as
+    // the canonical id everywhere (Stripe metadata, file backup, emails).
+    // If the DB isn't reachable yet, fall back to a locally-generated id so
+    // the customer flow doesn't break — email is still the source of truth.
+    let orderNumber: string;
+    let dbId: string | null = null;
+    try {
+      const dbRow = await createDbOrder({
+        customerEmail,
+        priceCents: tier.priceCents,
+        status: "draft",
+        genre: genre.id,
+        recipientName,
+        occasion: occasion || null,
+      });
+      orderNumber = dbRow.order_number;
+      dbId = dbRow.id;
+    } catch (err) {
+      console.error("[orders] Postgres write failed, using local id:", err);
+      orderNumber = generateOrderId();
+    }
+
     const order: Order = {
-      id: generateOrderId(),
+      id: orderNumber,
       createdAt: new Date().toISOString(),
-      status: tier.id === "preview" ? "received" : "pending_payment",
+      status: "pending_payment",
       tierId: tier.id,
       amountCents: tier.priceCents,
       customerEmail,
@@ -144,12 +170,11 @@ export async function POST(request: NextRequest) {
       customerNote: customerNote || undefined,
     };
 
-    // Persist (best-effort — file system may be read-only on some hosts)
+    // File-based mirror — keeps the admin page working with rich intake data.
     try {
       await saveOrder(order);
     } catch (err) {
-      console.error("[orders] persist failed:", err);
-      // Continue anyway — email is the source of truth
+      console.error("[orders] file persist failed:", err);
     }
 
     // Send notification emails (best-effort — failures don't block the customer)
@@ -161,7 +186,7 @@ export async function POST(request: NextRequest) {
 
     // Generate the AI draft in the background. The customer never sees it —
     // it's a starter for the songwriter to refine. Fire-and-forget so the
-    // checkout response isn't held up; persist the draft when it completes.
+    // checkout response isn't held up; persist the draft to Postgres when done.
     void (async () => {
       try {
         const draft = await generateLyrics({
@@ -171,8 +196,8 @@ export async function POST(request: NextRequest) {
           occasion: occasion || undefined,
           answers,
         });
-        if (draft) {
-          await updateOrder(order.id, { draftLyrics: draft });
+        if (draft && dbId) {
+          await updateDbOrder(dbId, { lyrics_json: draft });
         }
       } catch (err) {
         console.error("[orders] background lyrics generation failed:", err);
@@ -181,7 +206,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      orderId: order.id,
+      orderId: orderNumber,
       tier: { id: tier.id, name: tier.name, priceCents: tier.priceCents },
     });
   } catch (err) {

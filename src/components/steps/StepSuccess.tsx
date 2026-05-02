@@ -4,15 +4,13 @@ import Link from "next/link";
 
 interface StepSuccessProps {
   orderId: string | null;
-  customerEmail: string;
   recipientName: string;
   tierName: string;
   turnaround: string;
-  paid: boolean;
 }
 
 export default function StepSuccess(props: StepSuccessProps) {
-  const { orderId, customerEmail, recipientName, tierName, turnaround, paid } = props;
+  const { orderId, recipientName, tierName, turnaround } = props;
   return (
     <div className="max-w-2xl mx-auto text-center py-10">
       <div className="w-20 h-20 mx-auto mb-8 rounded-full bg-gradient-to-br from-gold-300 to-gold-500 flex items-center justify-center glow-warm">
@@ -22,26 +20,16 @@ export default function StepSuccess(props: StepSuccessProps) {
       </div>
 
       <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-3">
-        {paid ? "Payment received" : "Draft saved"}
+        Payment received
       </div>
       <h2 className="font-display text-4xl md:text-5xl text-cream-100 mb-4">
         Your song is in our hands.
       </h2>
 
       <p className="text-cream-200/70 max-w-lg mx-auto mb-8 leading-relaxed">
-        {paid ? (
-          <>
-            We've received your <strong className="text-cream-100">{tierName}</strong> order for{" "}
-            <strong className="text-cream-100">{recipientName}</strong>. You'll hear from us within{" "}
-            <strong className="text-gold-300">{turnaround}</strong> with the finished song.
-          </>
-        ) : (
-          <>
-            Your draft is saved and on its way to{" "}
-            <strong className="text-cream-100">{customerEmail}</strong>. When you're ready to bring it
-            to life, your unfinished song will be waiting.
-          </>
-        )}
+        We&rsquo;ve received your <strong className="text-cream-100">{tierName}</strong> order for{" "}
+        <strong className="text-cream-100">{recipientName}</strong>. You&rsquo;ll hear from us within{" "}
+        <strong className="text-gold-300">{turnaround}</strong> with the finished song.
       </p>
 
       {orderId && (

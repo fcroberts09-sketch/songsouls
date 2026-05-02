@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { TIERS, VISIBLE_TIERS, getTier } from "@/lib/pricing";
+import { VISIBLE_TIERS, getTier } from "@/lib/pricing";
 
 export default function PricingTiers() {
   const visible = VISIBLE_TIERS.map((id) => getTier(id)!).filter(Boolean);
@@ -12,15 +12,15 @@ export default function PricingTiers() {
             How much
           </div>
           <h2 className="font-display text-4xl md:text-5xl text-cream-100 mb-4">
-            Choose how finished{" "}
-            <span className="font-display-italic text-gold-shine">it should feel.</span>
+            Two ways to{" "}
+            <span className="font-display-italic text-gold-shine">begin a song.</span>
           </h2>
           <p className="text-cream-200/60 max-w-2xl mx-auto">
-            Every tier starts with a free lyric draft. You only pay when you've seen the words and want them brought to life.
+            Pay once, we begin. Songwriter-written lyrics, AI-assisted production.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 items-stretch">
+        <div className="grid md:grid-cols-2 gap-6 items-stretch max-w-4xl mx-auto">
           {visible.map((tier) => (
             <div
               key={tier.id}
@@ -41,12 +41,9 @@ export default function PricingTiers() {
                 <p className="text-sm text-cream-200/60 mb-6 leading-relaxed">{tier.tagline}</p>
                 <div className="flex items-baseline gap-2">
                   <span className="font-display text-5xl text-gold-shine">${tier.price}</span>
-                  {tier.id === "life-album" && (
-                    <span className="text-cream-200/50 text-sm">total</span>
-                  )}
                 </div>
                 <div className="text-xs uppercase tracking-widest text-cream-200/40 mt-2">
-                  {tier.turnaround} turnaround
+                  {tier.turnaround}
                 </div>
               </div>
 
@@ -81,7 +78,7 @@ export default function PricingTiers() {
                 href={`/create?tier=${tier.id}`}
                 className={tier.highlighted ? "btn-primary justify-center w-full" : "btn-ghost justify-center w-full"}
               >
-                {tier.id === "life-album" ? "Begin the album" : "Begin a song"}
+                Begin a song
               </Link>
             </div>
           ))}

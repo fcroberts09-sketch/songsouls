@@ -9,19 +9,19 @@ import StepGenre from "./steps/StepGenre";
 import StepRecipient from "./steps/StepRecipient";
 import StepPhotos from "./steps/StepPhotos";
 import StepQuestions from "./steps/StepQuestions";
-import StepCheckout from "./steps/StepCheckout";
+import StepReview from "./steps/StepReview";
 import StepSuccess from "./steps/StepSuccess";
 
-type StepKey = "genre" | "recipient" | "photos" | "questions" | "checkout" | "success";
+type StepKey = "genre" | "recipient" | "photos" | "questions" | "review" | "success";
 
-const STEP_ORDER: StepKey[] = ["genre", "recipient", "photos", "questions", "checkout"];
+const STEP_ORDER: StepKey[] = ["genre", "recipient", "photos", "questions", "review"];
 
 export default function CreateWizard() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Initial tier from query string (e.g. /create?tier=curated)
-  const initialTier = (searchParams.get("tier") as TierId) || "ai-crafted";
+  // Initial tier from query string (e.g. /create?tier=keepsake)
+  const initialTier = (searchParams.get("tier") as TierId) || "standard";
   const initialStep = (searchParams.get("step") as StepKey) || "genre";
 
   // Form state
@@ -36,7 +36,7 @@ export default function CreateWizard() {
 
   // Checkout state
   const [selectedTier, setSelectedTier] = useState<TierId>(
-    initialTier && getTier(initialTier) && initialTier !== "preview" ? initialTier : "ai-crafted"
+    initialTier && getTier(initialTier) ? initialTier : "standard"
   );
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerName, setCustomerName] = useState("");
@@ -44,7 +44,6 @@ export default function CreateWizard() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [orderId, setOrderId] = useState<string | null>(null);
-  const [paid, setPaid] = useState(false);
 
   const genre = useMemo(() => (genreId ? getGenre(genreId) : null), [genreId]);
 
@@ -67,7 +66,7 @@ export default function CreateWizard() {
         const requiredQs = genre.questions.filter((q) => q.required);
         return requiredQs.every((q) => (answers[q.id] || "").trim().length > 0);
       }
-      case "checkout":
+      case "review":
         return Boolean(customerName.trim() && customerEmail.trim().includes("@"));
       default:
         return false;
@@ -117,29 +116,20 @@ export default function CreateWizard() {
         }
         setOrderId(orderData.orderId);
 
-        // 2. Create Stripe checkout session
-        const checkoutRes = await fetch("/api/checkout", {
+        // 2. Create Stripe Checkout session and redirect.
+        const checkoutRes = await fetch("/api/checkout/create-session", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            tierId,
             orderId: orderData.orderId,
-            customerEmail,
-            recipientName,
+            tier: tierId,
           }),
         });
         const checkoutData = await checkoutRes.json();
-        if (!checkoutRes.ok || !checkoutData.success) {
+        if (!checkoutRes.ok || !checkoutData.success || !checkoutData.url) {
           throw new Error(checkoutData.error || "Couldn't start checkout.");
         }
-
-        // If Stripe is configured, redirect. Otherwise, treat as a captured lead.
-        if (checkoutData.mode === "stripe" && checkoutData.url) {
-          window.location.href = checkoutData.url;
-        } else {
-          setPaid(false);
-          goToStep("success");
-        }
+        window.location.href = checkoutData.url;
       } catch (err) {
         setSubmitError(err instanceof Error ? err.message : "Something went wrong.");
       } finally {
@@ -158,7 +148,6 @@ export default function CreateWizard() {
       customerNote,
       answers,
       photos,
-      goToStep,
     ]
   );
 
@@ -167,7 +156,6 @@ export default function CreateWizard() {
     if (searchParams.get("step") === "success") {
       const orderParam = searchParams.get("order");
       if (orderParam) setOrderId(orderParam);
-      setPaid(true);
       setStep("success");
     }
   }, [searchParams]);
@@ -181,11 +169,9 @@ export default function CreateWizard() {
       <div className="min-h-screen pt-32 pb-20 px-6">
         <StepSuccess
           orderId={orderId}
-          customerEmail={customerEmail}
           recipientName={recipientName || "your person"}
           tierName={getTier(selectedTier)?.name || ""}
           turnaround={getTier(selectedTier)?.turnaround || "soon"}
-          paid={paid}
         />
       </div>
     );
@@ -240,8 +226,8 @@ export default function CreateWizard() {
           <StepQuestions genre={genre} answers={answers} setAnswer={setAnswer} />
         )}
 
-        {step === "checkout" && (
-          <StepCheckout
+        {step === "review" && genre && (
+          <StepReview
             selectedTier={selectedTier}
             setSelectedTier={setSelectedTier}
             customerEmail={customerEmail}
@@ -250,6 +236,11 @@ export default function CreateWizard() {
             setCustomerName={setCustomerName}
             customerNote={customerNote}
             setCustomerNote={setCustomerNote}
+            genre={genre}
+            recipientName={recipientName}
+            recipientRelationship={recipientRelationship}
+            occasion={occasion}
+            answers={answers}
           />
         )}
 
@@ -271,15 +262,15 @@ export default function CreateWizard() {
           </button>
 
           <div className="flex items-center gap-3">
-            {step === "checkout" ? (
+            {step === "review" ? (
               <button
                 onClick={() => submitOrder()}
                 disabled={submitting || !canAdvance}
                 className="btn-primary"
               >
                 {submitting
-                  ? "One moment…"
-                  : `Continue to ${getTier(selectedTier)?.name} · $${getTier(selectedTier)?.price}`}
+                  ? "Starting checkout…"
+                  : `Pay & Begin · $${getTier(selectedTier)?.price}`}
               </button>
             ) : (
               <button
