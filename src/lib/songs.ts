@@ -13,6 +13,20 @@ import type { ShowcaseSong } from "@/types/song";
 
 export const SHOWCASE_SONGS: ShowcaseSong[] = [
   {
+    slug: "gas-station-ghost",
+    title: "Gas Station Ghost",
+    dedication: "For my father",
+    genre: "In Memory",
+    duration: "5:54",
+    tier: "curated",
+    addedAt: "2026-05-02",
+    audioUrl: "/songs/gas-station-ghost.mp3",
+    coverGradient: "from-indigo-700/40 via-purple-900/30 to-ink-950",
+    story:
+      "I had been journaling about the loss of my father for many years — random thoughts, memories, the things that were real, the sadness. But it had never really been a focus. Then last year, on a hike, it hit me: you can't miss something you never knew. This song is what came of that.",
+    lyrics: "",
+  },
+  {
     slug: "the-light-she-left",
     title: "The Light She Left",
     dedication: "For my grandmother, Rose — 1932–2024",

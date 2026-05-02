@@ -8,7 +8,7 @@ interface StepPhotosProps {
   setPhotos: (photos: UploadedPhoto[]) => void;
 }
 
-const MAX_PHOTOS = 6;
+const MAX_PHOTOS = 3;
 const MAX_BYTES = 6 * 1024 * 1024; // 6MB
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
@@ -113,8 +113,8 @@ export default function StepPhotos({ photos, setPhotos }: StepPhotosProps) {
           Photos (optional)
         </h2>
         <p className="text-cream-200/60 max-w-lg mx-auto">
-          One photo of them — or several. We use them to inform the lyrics, not to be in the song.
-          You can skip this step if you'd rather not share.
+          Up to three photos that show who they are — a portrait, them hiking, doing the thing they love.
+          We use these to inform the lyrics, not to be in the song. You can skip this step if you&rsquo;d rather not share.
         </p>
       </header>
 

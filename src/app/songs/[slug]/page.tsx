@@ -96,16 +96,18 @@ export default function SongPage({ params }: PageProps) {
         </section>
 
         {/* Lyrics */}
-        <section className="mb-16">
-          <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-4">
-            The lyrics
-          </div>
-          <div className="card-deep rounded-2xl p-8 md:p-12">
-            <pre className="font-display text-cream-100/95 leading-relaxed whitespace-pre-wrap text-lg">
-              {song.lyrics}
-            </pre>
-          </div>
-        </section>
+        {song.lyrics?.trim() && (
+          <section className="mb-16">
+            <div className="text-xs uppercase tracking-widest text-gold-400/80 mb-4">
+              The lyrics
+            </div>
+            <div className="card-deep rounded-2xl p-8 md:p-12">
+              <pre className="font-display text-cream-100/95 leading-relaxed whitespace-pre-wrap text-lg">
+                {song.lyrics}
+              </pre>
+            </div>
+          </section>
+        )}
 
         {/* Recipient quote */}
         {song.recipientQuote && (

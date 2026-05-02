@@ -45,7 +45,7 @@ export default function PrivacyPage() {
             </p>
             <ul className="list-disc pl-6 space-y-1.5">
               <li><strong>Order intake.</strong> Your email address and name; the recipient&rsquo;s name and your relationship to them; the occasion; the requested delivery date; any free-text answers you write about the recipient and your relationship; any optional note to us; and your selected genre and tier.</li>
-              <li><strong>Photographs.</strong> Photos you choose to upload as part of the intake (up to six per order, capped at approximately six megabytes each). Photos are stored alongside the order to inform the songwriting work.</li>
+              <li><strong>Photographs.</strong> Photos you choose to upload as part of the intake (up to three per order, capped at approximately six megabytes each). Photos are stored alongside the order to inform the songwriting work.</li>
               <li><strong>Lyric drafts.</strong> Drafts you generate using the Lyric Preview, which we keep with the order so a human songwriter can build on them.</li>
               <li><strong>Communications.</strong> The contents of emails you send us, and our replies.</li>
             </ul>

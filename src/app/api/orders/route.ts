@@ -113,10 +113,10 @@ export async function POST(request: NextRequest) {
       })
       .filter((a) => a.questionId && a.answer);
 
-    // Photos — accept up to 6, max ~6MB each
+    // Photos — accept up to 3, max ~6MB each
     const rawPhotos = Array.isArray(body.photos) ? body.photos : [];
     const photos: UploadedPhoto[] = [];
-    for (const raw of rawPhotos.slice(0, 6)) {
+    for (const raw of rawPhotos.slice(0, 3)) {
       const obj = (raw || {}) as Record<string, unknown>;
       const src = safeString(obj.src, 8_000_000);
       if (!isValidPhotoDataUrl(src)) continue;
