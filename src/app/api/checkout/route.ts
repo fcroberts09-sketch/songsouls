@@ -1,7 +1,32 @@
+/**
+ * POST /api/checkout
+ *
+ * The single entry point to a *paid* order:
+ *  1. Validate the entire order payload (tier, genre, customer, recipient, etc).
+ *  2. Persist the order with status = "pending_payment".
+ *  3. Create a Stripe Checkout Session that references the order via
+ *     client_reference_id + metadata.order_id.
+ *  4. Return the hosted-checkout URL — the client redirects the user to it.
+ *
+ * Emails are NOT sent here. They're triggered after payment confirmation by
+ * /api/webhooks/stripe (or the success-page verify endpoint as a fallback).
+ *
+ * If Stripe isn't configured, this route refuses to create a paid order —
+ * it would be a payment-bypass bug to do otherwise.
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { safeString, isValidEmail } from "@/lib/validation";
+import {
+  isValidEmail,
+  isValidPhotoDataUrl,
+  safeString,
+  sanitizeLyrics,
+} from "@/lib/validation";
+import { saveOrder, generateOrderId, updateOrder } from "@/lib/orders";
+import { getGenre } from "@/lib/genres";
 import { getTier } from "@/lib/pricing";
+import type { Order, IntakeAnswer, UploadedPhoto } from "@/types/order";
 
 const STRIPE_API = "https://api.stripe.com/v1";
 
@@ -13,16 +38,19 @@ function getClientIp(request: NextRequest): string {
 
 interface CheckoutBody {
   tierId?: unknown;
-  orderId?: unknown;
+  genreId?: unknown;
   customerEmail?: unknown;
+  customerName?: unknown;
   recipientName?: unknown;
+  recipientRelationship?: unknown;
+  occasion?: unknown;
+  deliveryDate?: unknown;
+  customerNote?: unknown;
+  answers?: unknown;
+  photos?: unknown;
+  draftLyrics?: unknown;
 }
 
-/**
- * Create a Stripe Checkout Session and return the redirect URL.
- * If Stripe is not configured, returns a graceful fallback that the
- * client can use to skip checkout (treat the order as a lead instead).
- */
 export async function POST(request: NextRequest) {
   try {
     const ip = getClientIp(request);
@@ -44,6 +72,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // ----- Validate tier -------------------------------------------------
     const tierId = safeString(body.tierId, 50);
     const tier = getTier(tierId as never);
     if (!tier) {
@@ -52,46 +81,136 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
     if (tier.priceCents === 0) {
       return NextResponse.json(
-        { success: false, error: "Free tier doesn't require checkout." },
+        {
+          success: false,
+          error: "The free preview tier doesn't go through checkout.",
+        },
         { status: 400 }
       );
     }
 
-    const orderId = safeString(body.orderId, 50);
-    const customerEmail = safeString(body.customerEmail, 254);
-    const recipientName = safeString(body.recipientName, 80);
+    // ----- Validate Stripe is configured ---------------------------------
+    // Refuse to create the order at all if we can't take payment — otherwise
+    // we'd leave a half-paid order in the DB with no way to recover.
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeKey) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Payments are temporarily unavailable. Please try again shortly or email us.",
+        },
+        { status: 503 }
+      );
+    }
 
+    // ----- Validate the rest of the order --------------------------------
+    const genreId = safeString(body.genreId, 50);
+    const genre = getGenre(genreId);
+    if (!genre) {
+      return NextResponse.json(
+        { success: false, error: "Unknown genre" },
+        { status: 400 }
+      );
+    }
+
+    const customerEmail = safeString(body.customerEmail, 254);
     if (!isValidEmail(customerEmail)) {
       return NextResponse.json(
         { success: false, error: "A valid email is required for checkout." },
         { status: 400 }
       );
     }
+    const customerName = safeString(body.customerName, 100) || "Friend";
 
-    const stripeKey = process.env.STRIPE_SECRET_KEY;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `http://${request.headers.get("host") || "localhost:3000"}`;
+    const recipientName = safeString(body.recipientName, 80);
+    const recipientRelationship = safeString(body.recipientRelationship, 80);
+    if (!recipientName) {
+      return NextResponse.json(
+        { success: false, error: "Tell us who this song is for." },
+        { status: 400 }
+      );
+    }
 
-    // Graceful fallback: no Stripe configured → tell client to skip checkout
-    if (!stripeKey) {
-      return NextResponse.json({
-        success: true,
-        mode: "no-stripe",
-        message:
-          "Stripe is not configured — the order has been logged as a lead. Reach out to the customer manually with a payment link.",
+    const occasion = safeString(body.occasion, 200);
+    const deliveryDate = safeString(body.deliveryDate, 50);
+    const customerNote = safeString(body.customerNote, 1000);
+
+    const rawAnswers = Array.isArray(body.answers) ? body.answers : [];
+    const answers: IntakeAnswer[] = rawAnswers
+      .slice(0, 20)
+      .map((a: unknown) => {
+        const obj = (a || {}) as Record<string, unknown>;
+        return {
+          questionId: safeString(obj.questionId, 80),
+          question: safeString(obj.question, 300),
+          answer: safeString(obj.answer, 3000),
+        };
+      })
+      .filter((a) => a.questionId && a.answer);
+
+    const rawPhotos = Array.isArray(body.photos) ? body.photos : [];
+    const photos: UploadedPhoto[] = [];
+    for (const raw of rawPhotos.slice(0, 3)) {
+      const obj = (raw || {}) as Record<string, unknown>;
+      const src = safeString(obj.src, 8_000_000);
+      if (!isValidPhotoDataUrl(src)) continue;
+      photos.push({
+        src,
+        caption: safeString(obj.caption, 200) || undefined,
+        filename: safeString(obj.filename, 200) || undefined,
       });
     }
 
-    // Build Stripe Checkout Session via REST (no SDK needed)
+    const draftLyrics = sanitizeLyrics(body.draftLyrics) || undefined;
+
+    // ----- Persist the pending order ------------------------------------
+    const order: Order = {
+      id: generateOrderId(),
+      createdAt: new Date().toISOString(),
+      status: "pending_payment",
+      tierId: tier.id,
+      amountCents: tier.priceCents,
+      customerEmail,
+      customerName,
+      genreId: genre.id,
+      recipientName,
+      recipientRelationship,
+      occasion: occasion || undefined,
+      deliveryDate: deliveryDate || undefined,
+      answers,
+      photos,
+      customerNote: customerNote || undefined,
+      draftLyrics,
+    };
+
+    try {
+      await saveOrder(order);
+    } catch (err) {
+      console.error("[checkout] persist failed:", err);
+      return NextResponse.json(
+        { success: false, error: "Couldn't save your order. Please try again." },
+        { status: 500 }
+      );
+    }
+
+    // ----- Create the Stripe Checkout Session ---------------------------
+    const siteUrl =
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      `http://${request.headers.get("host") || "localhost:3000"}`;
+
     const params = new URLSearchParams();
     params.append("mode", "payment");
     params.append("customer_email", customerEmail);
-    params.append("success_url", `${siteUrl}/create?step=success&order=${encodeURIComponent(orderId)}`);
+    // {CHECKOUT_SESSION_ID} is a Stripe placeholder substituted at redirect.
+    params.append(
+      "success_url",
+      `${siteUrl}/create?step=success&session_id={CHECKOUT_SESSION_ID}`
+    );
     params.append("cancel_url", `${siteUrl}/create?step=checkout&canceled=1`);
 
-    // Use predefined Stripe price if env var is set, else inline price_data
     const stripePriceId = tier.stripePriceEnvVar
       ? process.env[tier.stripePriceEnvVar]
       : undefined;
@@ -110,10 +229,9 @@ export async function POST(request: NextRequest) {
       params.append("line_items[0][quantity]", "1");
     }
 
-    if (orderId) {
-      params.append("metadata[order_id]", orderId);
-      params.append("client_reference_id", orderId);
-    }
+    params.append("metadata[order_id]", order.id);
+    params.append("client_reference_id", order.id);
+    params.append("payment_intent_data[metadata][order_id]", order.id);
 
     const stripeRes = await fetch(`${STRIPE_API}/checkout/sessions`, {
       method: "POST",
@@ -144,11 +262,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Stash the session id on the order for cross-referencing later (webhook,
+    // verify endpoint, admin dashboard).
+    try {
+      await updateOrder(order.id, { stripeSessionId: session.id });
+    } catch (err) {
+      // Non-fatal — the webhook can still find the order via metadata.order_id.
+      console.error("[checkout] failed to attach sessionId to order:", err);
+    }
+
     return NextResponse.json({
       success: true,
-      mode: "stripe",
       url: session.url,
       sessionId: session.id,
+      orderId: order.id,
     });
   } catch (err) {
     console.error("[checkout] error", err);

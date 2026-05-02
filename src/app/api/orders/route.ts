@@ -1,3 +1,14 @@
+/**
+ * POST /api/orders  (save-draft path only)
+ *
+ * Used when a customer chose "Just email me the draft" instead of paying.
+ * Saves a free-tier order, fires the draft email, and returns the new
+ * order id. No payment is involved.
+ *
+ * The paid flow lives in /api/checkout — orders are NOT created there
+ * until Stripe has accepted the customer's card.
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit } from "@/lib/rate-limit";
 import {
@@ -7,7 +18,7 @@ import {
   sanitizeLyrics,
 } from "@/lib/validation";
 import { saveOrder, generateOrderId } from "@/lib/orders";
-import { notifyNewOrder } from "@/lib/email";
+import { notifyDraftSaved } from "@/lib/email";
 import { getGenre } from "@/lib/genres";
 import { getTier } from "@/lib/pricing";
 import type { Order, IntakeAnswer, UploadedPhoto } from "@/types/order";
@@ -19,7 +30,7 @@ function getClientIp(request: NextRequest): string {
 }
 
 interface OrderRequestBody {
-  tierId?: unknown;
+  mode?: unknown;
   genreId?: unknown;
   customerEmail?: unknown;
   customerName?: unknown;
@@ -54,17 +65,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate tier
-    const tierId = safeString(body.tierId, 50);
-    const tier = getTier(tierId as never);
-    if (!tier) {
+    // This endpoint is now save-draft only. Reject anything else so paid
+    // orders can never accidentally be created without going through Stripe.
+    const mode = safeString(body.mode, 50);
+    if (mode !== "save-draft") {
       return NextResponse.json(
-        { success: false, error: "Unknown tier" },
+        {
+          success: false,
+          error:
+            "Paid orders must go through /api/checkout. This endpoint only saves free drafts.",
+        },
         { status: 400 }
       );
     }
 
-    // Validate genre
+    const tier = getTier("preview");
+    if (!tier) {
+      return NextResponse.json(
+        { success: false, error: "Preview tier missing" },
+        { status: 500 }
+      );
+    }
+
     const genreId = safeString(body.genreId, 50);
     const genre = getGenre(genreId);
     if (!genre) {
@@ -74,17 +96,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate customer
     const customerEmail = safeString(body.customerEmail, 254);
     if (!isValidEmail(customerEmail)) {
       return NextResponse.json(
-        { success: false, error: "A valid email is required so we can send you the song." },
+        { success: false, error: "A valid email is required to save your draft." },
         { status: 400 }
       );
     }
     const customerName = safeString(body.customerName, 100) || "Friend";
 
-    // Validate recipient
     const recipientName = safeString(body.recipientName, 80);
     const recipientRelationship = safeString(body.recipientRelationship, 80);
     if (!recipientName) {
@@ -94,12 +114,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Optional fields
     const occasion = safeString(body.occasion, 200);
     const deliveryDate = safeString(body.deliveryDate, 50);
     const customerNote = safeString(body.customerNote, 1000);
 
-    // Answers
     const rawAnswers = Array.isArray(body.answers) ? body.answers : [];
     const answers: IntakeAnswer[] = rawAnswers
       .slice(0, 20)
@@ -113,7 +131,6 @@ export async function POST(request: NextRequest) {
       })
       .filter((a) => a.questionId && a.answer);
 
-    // Photos — accept up to 3, max ~6MB each
     const rawPhotos = Array.isArray(body.photos) ? body.photos : [];
     const photos: UploadedPhoto[] = [];
     for (const raw of rawPhotos.slice(0, 3)) {
@@ -127,13 +144,12 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Draft lyrics (if customer generated a preview)
     const draftLyrics = sanitizeLyrics(body.draftLyrics) || undefined;
 
     const order: Order = {
       id: generateOrderId(),
       createdAt: new Date().toISOString(),
-      status: tier.id === "preview" ? "received" : "pending_payment",
+      status: "received",
       tierId: tier.id,
       amountCents: tier.priceCents,
       customerEmail,
@@ -149,19 +165,17 @@ export async function POST(request: NextRequest) {
       draftLyrics,
     };
 
-    // Persist (best-effort — file system may be read-only on some hosts)
     try {
       await saveOrder(order);
     } catch (err) {
       console.error("[orders] persist failed:", err);
-      // Continue anyway — email is the source of truth
+      // Continue anyway — we still want to email the draft.
     }
 
-    // Send notification emails (best-effort — failures don't block the customer)
     try {
-      await notifyNewOrder(order);
+      await notifyDraftSaved(order);
     } catch (err) {
-      console.error("[orders] notification failed:", err);
+      console.error("[orders] draft email failed:", err);
     }
 
     return NextResponse.json({
