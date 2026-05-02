@@ -38,7 +38,7 @@ export default function TermsPage() {
               You must be at least eighteen (18) years old and have the legal capacity to enter into a contract to use the Service. By using the Service, you represent and warrant that you meet these requirements. If you are using the Service on behalf of an organization, you represent that you have authority to bind that organization, and &ldquo;you&rdquo; refers to both you individually and that organization.
             </p>
             <p>
-              The Service is intended for personal, non-commercial use unless we expressly agree otherwise in writing. Practitioners (e.g., therapists, clinicians, planners) using the Service in their work agree to the additional terms communicated as part of our practitioner program.
+              The Service is intended for personal, non-commercial use unless we expressly agree otherwise in writing.
             </p>
           </Section>
 
@@ -71,7 +71,7 @@ export default function TermsPage() {
               Each paid tier includes a defined number of revision rounds, as listed on the pricing section at the time of purchase. A &ldquo;revision&rdquo; means changes to lyrics, vocal style, instrumentation, mix, or arrangement of an existing Deliverable; it does not include re-writing the song from a substantially different premise.
             </p>
             <p>
-              <strong>Refunds for non-delivery.</strong> If we fail to deliver the Deliverable within the turnaround window stated for your tier (subject to extensions for revisions you request, force majeure under Section 19, or information we&rsquo;ve requested from you and not received), you may request a full refund within fourteen (14) days of the missed window.
+              <strong>Refunds for non-delivery.</strong> If we fail to deliver the Deliverable within the turnaround window stated for your tier (subject to extensions for revisions you request, force majeure under Section 18, or information we&rsquo;ve requested from you and not received), you may request a full refund within fourteen (14) days of the missed window.
             </p>
             <p>
               <strong>Refunds for dissatisfaction.</strong> Because each Deliverable is custom-made for you, we do not offer refunds based on subjective dissatisfaction once your included revision rounds have been used. We will, however, work in good faith to address concerns raised before your revisions are exhausted. If you believe a Deliverable is materially defective (e.g., wrong recipient name, corrupted audio, broken file), notify us within thirty (30) days of delivery and we will repair or replace it.
@@ -153,7 +153,7 @@ export default function TermsPage() {
             <ul className="list-disc pl-6 space-y-1.5">
               <li>Reverse-engineer, decompile, or attempt to extract source code or model weights from the Service;</li>
               <li>Use the Service to build a competing product or to train any machine-learning model;</li>
-              <li>Probe, scan, or test the vulnerability of the Service, or interfere with its operation, except as part of a coordinated security disclosure under Section 19;</li>
+              <li>Probe, scan, or test the vulnerability of the Service, or interfere with its operation, except as part of a coordinated security disclosure under Section 18;</li>
               <li>Access the Service through automated means, scrape it, or impose unreasonable load on it;</li>
               <li>Submit malicious code, files, or links;</li>
               <li>Misrepresent your identity or affiliation; or</li>
@@ -167,19 +167,13 @@ export default function TermsPage() {
             </p>
           </Section>
 
-          <Section id="11" title="11. Practitioner Use">
-            <p>
-              If you use the Service in your work as a licensed clinician, therapist, planner, or other practitioner with or on behalf of a client, you represent that: (i) you have the consents needed to share that client&rsquo;s information with us; (ii) you alone are responsible for clinical judgments, diagnoses, and the appropriateness of any Deliverable for that client; and (iii) you will not represent the Service as a healthcare service, an FDA-regulated product, or a treatment.
-            </p>
-          </Section>
-
-          <Section id="12" title="12. Disclaimer of Warranties">
+          <Section id="11" title="11. Disclaimer of Warranties">
             <p>
               EXCEPT AS EXPRESSLY STATED IN THESE TERMS AND TO THE FULLEST EXTENT PERMITTED BY LAW, THE SERVICE AND ALL DELIVERABLES ARE PROVIDED &ldquo;AS IS&rdquo; AND &ldquo;AS AVAILABLE,&rdquo; WITH ALL FAULTS AND WITHOUT WARRANTY OF ANY KIND, EXPRESS, IMPLIED, OR STATUTORY, INCLUDING WITHOUT LIMITATION ANY WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, NON-INFRINGEMENT, OR THAT THE SERVICE WILL BE UNINTERRUPTED, ERROR-FREE, OR FREE OF HARMFUL COMPONENTS. WE DO NOT WARRANT THAT AI-GENERATED CONTENT WILL BE ACCURATE, APPROPRIATE, OR FREE OF ARTIFACTS, AND YOU AGREE TO REVIEW EACH DELIVERABLE BEFORE SHARING IT.
             </p>
           </Section>
 
-          <Section id="13" title="13. Limitation of Liability">
+          <Section id="12" title="12. Limitation of Liability">
             <p>
               TO THE FULLEST EXTENT PERMITTED BY LAW:
             </p>
@@ -192,31 +186,31 @@ export default function TermsPage() {
             </p>
           </Section>
 
-          <Section id="14" title="14. Indemnification">
+          <Section id="13" title="13. Indemnification">
             <p>
               You will defend, indemnify, and hold harmless {brand.name} and its officers, employees, contractors, and agents from and against any third-party claim, loss, liability, damage, or expense (including reasonable attorneys&rsquo; fees) arising out of or relating to (a) your Inputs; (b) your breach of these Terms or applicable law; (c) your misuse of any Deliverable; or (d) your infringement of a third party&rsquo;s rights. We will promptly notify you of the claim and reasonably cooperate with your defense; you will not settle any claim that imposes any obligation or admission on us without our prior written consent.
             </p>
           </Section>
 
-          <Section id="15" title="15. Termination">
+          <Section id="14" title="14. Termination">
             <p>
-              We may suspend or terminate your access to the Service at any time, with or without notice, including if we reasonably believe you have violated these Terms. You may stop using the Service at any time. Sections that by their nature should survive termination — including Sections 6 (Your Inputs), 8 (Ownership and License), 12 (Disclaimers), 13 (Limitation of Liability), 14 (Indemnification), 18 (Governing Law and Disputes), and 19 (Miscellaneous) — survive.
+              We may suspend or terminate your access to the Service at any time, with or without notice, including if we reasonably believe you have violated these Terms. You may stop using the Service at any time. Sections that by their nature should survive termination — including Sections 6 (Your Inputs), 8 (Ownership and License), 11 (Disclaimers), 12 (Limitation of Liability), 13 (Indemnification), 17 (Governing Law and Disputes), and 18 (Miscellaneous) — survive.
             </p>
           </Section>
 
-          <Section id="16" title="16. Changes to the Service or to These Terms">
+          <Section id="15" title="15. Changes to the Service or to These Terms">
             <p>
               We may update the Service and these Terms from time to time. If we make a material change to these Terms, we will update the &ldquo;Effective&rdquo; date above and, where reasonable, notify you by email or by a notice in the Service. Your continued use of the Service after the change becomes effective is your acceptance of the updated Terms. If you do not agree, your sole remedy is to stop using the Service.
             </p>
           </Section>
 
-          <Section id="17" title="17. Communications and Notice">
+          <Section id="16" title="16. Communications and Notice">
             <p>
               You agree that we may send you operational, transactional, and account-related communications by email at the address you provide. Marketing emails are sent only with your consent and you can unsubscribe at any time. Notices to us must be sent to <a href={`mailto:${brand.contact.email}`} className="text-gold-300 hover:text-gold-200 underline underline-offset-4">{brand.contact.email}</a>.
             </p>
           </Section>
 
-          <Section id="18" title="18. Governing Law and Dispute Resolution">
+          <Section id="17" title="17. Governing Law and Dispute Resolution">
             <p>
               <strong>Governing law.</strong> These Terms are governed by the laws of the State of Delaware, without regard to its conflict-of-laws principles. The United Nations Convention on Contracts for the International Sale of Goods does not apply.
             </p>
@@ -237,7 +231,7 @@ export default function TermsPage() {
             </p>
           </Section>
 
-          <Section id="19" title="19. Miscellaneous">
+          <Section id="18" title="18. Miscellaneous">
             <p>
               <strong>Entire agreement.</strong> These Terms, together with the Privacy Policy and any tier-specific terms presented at checkout, are the entire agreement between you and us.
             </p>
@@ -258,7 +252,7 @@ export default function TermsPage() {
             </p>
           </Section>
 
-          <Section id="20" title="20. Contact">
+          <Section id="19" title="19. Contact">
             <p>
               Questions about these Terms? Write to{" "}
               <a href={`mailto:${brand.contact.email}`} className="text-gold-300 hover:text-gold-200 underline underline-offset-4">

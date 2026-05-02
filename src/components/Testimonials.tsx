@@ -13,9 +13,9 @@ const testimonials = [
   },
   {
     quote:
-      "My therapist suggested I write a letter to seven-year-old me. SongSouls turned it into a song. I listen to it on the drive home from sessions.",
+      "I sent them three paragraphs about my best friend of twenty years. They sent back a song that made her sob at her birthday dinner. The whole table did.",
     author: "Jordan T.",
-    context: "Healing tier",
+    context: "Friendship, $129 tier",
   },
 ];
 

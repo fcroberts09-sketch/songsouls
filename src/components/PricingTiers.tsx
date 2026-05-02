@@ -87,9 +87,6 @@ export default function PricingTiers() {
           ))}
         </div>
 
-        <p className="text-center text-cream-200/50 text-sm mt-10 max-w-2xl mx-auto">
-          Working with a therapist or grief counselor? <Link href="/about" className="text-gold-300 hover:text-gold-200 underline underline-offset-4">Reach out about our practitioner program.</Link>
-        </p>
       </div>
     </section>
   );

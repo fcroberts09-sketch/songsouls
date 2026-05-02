@@ -37,7 +37,7 @@ export default function ManifestoPage() {
           </p>
 
           <p>
-            We work with therapists, with grief counselors, with wedding planners, with daughters who never wrote a poem in their life. We work with people who didn't know they were songwriters until they typed the first answer and saw something they didn't know they remembered.
+            We work with husbands, with daughters, with best friends of twenty years, with wedding planners, with people who never wrote a poem in their life. We work with people who didn't know they were songwriters until they typed the first answer and saw something they didn't know they remembered.
           </p>
 
           <p className="font-display-italic text-gold-200">

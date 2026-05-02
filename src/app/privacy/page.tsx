@@ -35,7 +35,7 @@ export default function PrivacyPage() {
 
           <Section id="1" title="1. Scope and Roles">
             <p>
-              For information you submit through the Service, {brand.name} acts as the &ldquo;controller&rdquo; (or &ldquo;business&rdquo; under California law) — meaning we decide why and how it&rsquo;s processed. Where we provide the Service to a practitioner under the practitioner program and the practitioner is acting as a controller for their client&rsquo;s information, the practitioner is responsible for the lawful basis to share that information with us; we will act as a processor (or service provider) under appropriate written terms.
+              For information you submit through the Service, {brand.name} acts as the &ldquo;controller&rdquo; (or &ldquo;business&rdquo; under California law) — meaning we decide why and how it&rsquo;s processed.
             </p>
           </Section>
 

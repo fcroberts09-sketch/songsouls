@@ -137,7 +137,7 @@ If you're listening — I'm still your son tonight.`,
     audioUrl: "/songs/the-version-of-me-at-seven.mp3",
     coverGradient: "from-purple-500/40 via-indigo-600/30 to-ink-900",
     story:
-      "My therapist suggested I write a letter to seven-year-old me. I asked SongSouls to turn it into a song instead. I listen to it on the drive home from sessions. It's mine and hers.",
+      "I'd been carrying around a letter to seven-year-old me for years and never finished it. I asked SongSouls to turn it into a song instead. I play it on the drives where I need it most. It's mine and hers.",
     lyrics: `Hey little one, with the bangs you cut yourself,
 with the pockets full of acorns and the bruise on your knee —
 I came back to tell you what I know now.

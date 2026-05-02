@@ -30,7 +30,6 @@ export default function Footer() {
           <ul className="space-y-1 text-sm text-cream-200/70">
             <li><Link href="/create" className="hover:text-gold-200 transition-colors block py-2">Create a song</Link></li>
             <li><a href={`mailto:${brand.contact.email}`} className="hover:text-gold-200 transition-colors block py-2">Email us</a></li>
-            <li><Link href="/about" className="hover:text-gold-200 transition-colors block py-2">For therapists</Link></li>
           </ul>
         </div>
       </div>

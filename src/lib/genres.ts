@@ -221,7 +221,7 @@ export const GENRES: Genre[] = [
     name: "For the Inner Self",
     tagline: "A song for your past self, or the version still healing.",
     description:
-      "Used in therapy, journaling, and quiet evenings — a song written for the version of you that needed to hear something. Often co-created with a therapist.",
+      "For journaling, for quiet evenings, for the drive home — a song written for the version of you that needed to hear something.",
     musicalFlavor:
       "ambient folk, 65 bpm, breath-quiet vocal, piano and pads, slow build, in the spirit of Bon Iver or Sufjan Stevens",
     accent: "plum",

@@ -1,10 +1,14 @@
 import Link from "next/link";
-import { SHOWCASE_SONGS } from "@/lib/songs";
+import { SHOWCASE_SONGS, getShowcaseSong } from "@/lib/songs";
 import SongCard from "./SongCard";
+
+const HOMEPAGE_SLUGS = ["ten-thousand-tuesdays", "to-the-boy-with-my-name"];
 
 export default function SongShowcase() {
   const featured = SHOWCASE_SONGS[0];
-  const rest = SHOWCASE_SONGS.slice(1, 5);
+  const rest = HOMEPAGE_SLUGS.map(getShowcaseSong).filter(
+    (s): s is NonNullable<typeof s> => Boolean(s)
+  );
 
   if (!featured) return null;
 
@@ -44,7 +48,7 @@ export default function SongShowcase() {
           <SongCard song={featured} variant="feature" />
 
           {/* Grid of others */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
             {rest.map((song) => (
               <SongCard key={song.slug} song={song} />
             ))}
