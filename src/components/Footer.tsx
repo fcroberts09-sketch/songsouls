@@ -37,9 +37,18 @@ export default function Footer() {
 
       <div className="border-t border-gold-700/10">
         <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-cream-200/40">
-          <div>© {new Date().getFullYear()} {brand.name}. Made with care.</div>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <span>© {new Date().getFullYear()} {brand.name}. Made with care.</span>
+            <span className="text-cream-200/25">·</span>
+            <Link href="/terms" className="hover:text-gold-200 transition-colors">
+              Terms
+            </Link>
+            <Link href="/privacy" className="hover:text-gold-200 transition-colors">
+              Privacy
+            </Link>
+          </div>
           <div className="font-display-italic text-cream-200/50">
-            "Songs are how the people we love stay close."
+            &ldquo;Songs are how the people we love stay close.&rdquo;
           </div>
         </div>
       </div>
