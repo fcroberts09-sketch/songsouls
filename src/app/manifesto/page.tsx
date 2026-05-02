@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AudioPlayer from "@/components/AudioPlayer";
 
 export const metadata = {
   title: "Manifesto",
@@ -64,6 +65,16 @@ export default function ManifestoPage() {
             <p>
               For me, songs are about finding another way to connect with things you may not even know you feel. I&rsquo;ll share a very intimate song that has really uplifted my life and given me a freedom of emotion and feeling that I didn&rsquo;t know I could have. That&rsquo;s what pushed me to create this.
             </p>
+          </div>
+
+          <div className="mt-8 pt-8 border-t border-gold-700/15">
+            <div className="text-xs uppercase tracking-widest text-gold-400/70 mb-3">
+              The song
+            </div>
+            <div className="font-display text-2xl text-cream-100 mb-5">
+              Gas Station Ghost
+            </div>
+            <AudioPlayer src="/songs/gas-station-ghost.mp3" title="Gas Station Ghost" />
           </div>
         </section>
 
