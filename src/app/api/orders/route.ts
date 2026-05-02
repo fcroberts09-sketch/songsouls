@@ -4,12 +4,12 @@ import {
   isValidEmail,
   isValidPhotoDataUrl,
   safeString,
-  sanitizeLyrics,
 } from "@/lib/validation";
-import { saveOrder, generateOrderId } from "@/lib/orders";
+import { saveOrder, updateOrder, generateOrderId } from "@/lib/orders";
 import { notifyNewOrder } from "@/lib/email";
 import { getGenre } from "@/lib/genres";
 import { getTier } from "@/lib/pricing";
+import { generateLyrics } from "@/lib/lyrics";
 import type { Order, IntakeAnswer, UploadedPhoto } from "@/types/order";
 
 function getClientIp(request: NextRequest): string {
@@ -30,7 +30,6 @@ interface OrderRequestBody {
   answers?: unknown;
   photos?: unknown;
   customerNote?: unknown;
-  draftLyrics?: unknown;
 }
 
 export async function POST(request: NextRequest) {
@@ -127,9 +126,6 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Draft lyrics (if customer generated a preview)
-    const draftLyrics = sanitizeLyrics(body.draftLyrics) || undefined;
-
     const order: Order = {
       id: generateOrderId(),
       createdAt: new Date().toISOString(),
@@ -146,7 +142,6 @@ export async function POST(request: NextRequest) {
       answers,
       photos,
       customerNote: customerNote || undefined,
-      draftLyrics,
     };
 
     // Persist (best-effort — file system may be read-only on some hosts)
@@ -163,6 +158,26 @@ export async function POST(request: NextRequest) {
     } catch (err) {
       console.error("[orders] notification failed:", err);
     }
+
+    // Generate the AI draft in the background. The customer never sees it —
+    // it's a starter for the songwriter to refine. Fire-and-forget so the
+    // checkout response isn't held up; persist the draft when it completes.
+    void (async () => {
+      try {
+        const draft = await generateLyrics({
+          genreId: genre.id,
+          recipientName,
+          recipientRelationship,
+          occasion: occasion || undefined,
+          answers,
+        });
+        if (draft) {
+          await updateOrder(order.id, { draftLyrics: draft });
+        }
+      } catch (err) {
+        console.error("[orders] background lyrics generation failed:", err);
+      }
+    })();
 
     return NextResponse.json({
       success: true,

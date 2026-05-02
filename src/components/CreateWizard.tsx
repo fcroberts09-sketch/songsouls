@@ -2,20 +2,19 @@
 
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { GENRES, getGenre, type GenreId } from "@/lib/genres";
+import { getGenre, type GenreId } from "@/lib/genres";
 import { getTier, type TierId } from "@/lib/pricing";
-import type { GeneratedLyrics, UploadedPhoto } from "@/types/order";
+import type { UploadedPhoto } from "@/types/order";
 import StepGenre from "./steps/StepGenre";
 import StepRecipient from "./steps/StepRecipient";
 import StepPhotos from "./steps/StepPhotos";
 import StepQuestions from "./steps/StepQuestions";
-import StepPreview from "./steps/StepPreview";
 import StepCheckout from "./steps/StepCheckout";
 import StepSuccess from "./steps/StepSuccess";
 
-type StepKey = "genre" | "recipient" | "photos" | "questions" | "preview" | "checkout" | "success";
+type StepKey = "genre" | "recipient" | "photos" | "questions" | "checkout" | "success";
 
-const STEP_ORDER: StepKey[] = ["genre", "recipient", "photos", "questions", "preview", "checkout"];
+const STEP_ORDER: StepKey[] = ["genre", "recipient", "photos", "questions", "checkout"];
 
 export default function CreateWizard() {
   const router = useRouter();
@@ -34,11 +33,6 @@ export default function CreateWizard() {
   const [deliveryDate, setDeliveryDate] = useState("");
   const [photos, setPhotos] = useState<UploadedPhoto[]>([]);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-
-  // Lyrics state
-  const [lyrics, setLyrics] = useState<GeneratedLyrics | null>(null);
-  const [lyricsLoading, setLyricsLoading] = useState(false);
-  const [lyricsError, setLyricsError] = useState<string | null>(null);
 
   // Checkout state
   const [selectedTier, setSelectedTier] = useState<TierId>(
@@ -73,14 +67,12 @@ export default function CreateWizard() {
         const requiredQs = genre.questions.filter((q) => q.required);
         return requiredQs.every((q) => (answers[q.id] || "").trim().length > 0);
       }
-      case "preview":
-        return Boolean(lyrics);
       case "checkout":
         return Boolean(customerName.trim() && customerEmail.trim().includes("@"));
       default:
         return false;
     }
-  }, [step, genreId, recipientName, recipientRelationship, genre, answers, lyrics, customerName, customerEmail]);
+  }, [step, genreId, recipientName, recipientRelationship, genre, answers, customerName, customerEmail]);
 
   const goToStep = useCallback((next: StepKey) => {
     setStep(next);
@@ -89,52 +81,13 @@ export default function CreateWizard() {
     }
   }, []);
 
-  const generateLyrics = useCallback(async () => {
-    if (!genre) return;
-    setLyricsLoading(true);
-    setLyricsError(null);
-    setLyrics(null);
-    try {
-      const res = await fetch("/api/lyrics", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          genreId: genre.id,
-          recipientName,
-          recipientRelationship,
-          occasion,
-          answers: genre.questions.map((q) => ({
-            question: q.prompt,
-            answer: answers[q.id] || "",
-          })),
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || "Couldn't reach the songwriter.");
-      }
-      setLyrics(data.data);
-    } catch (err) {
-      setLyricsError(err instanceof Error ? err.message : "Something went wrong.");
-    } finally {
-      setLyricsLoading(false);
-    }
-  }, [genre, recipientName, recipientRelationship, occasion, answers]);
-
-  // Auto-generate when entering preview step (if not already generated)
-  useEffect(() => {
-    if (step === "preview" && !lyrics && !lyricsLoading && !lyricsError) {
-      void generateLyrics();
-    }
-  }, [step, lyrics, lyricsLoading, lyricsError, generateLyrics]);
-
   const submitOrder = useCallback(
-    async (mode: "checkout" | "save-draft") => {
+    async () => {
       if (!genre) return;
       setSubmitting(true);
       setSubmitError(null);
       try {
-        const tierId: TierId = mode === "save-draft" ? "preview" : selectedTier;
+        const tierId: TierId = selectedTier;
 
         // 1. Create the order
         const orderRes = await fetch("/api/orders", {
@@ -156,7 +109,6 @@ export default function CreateWizard() {
               answer: answers[q.id] || "",
             })),
             photos,
-            draftLyrics: lyrics,
           }),
         });
         const orderData = await orderRes.json();
@@ -164,13 +116,6 @@ export default function CreateWizard() {
           throw new Error(orderData.error || "Couldn't save your order.");
         }
         setOrderId(orderData.orderId);
-
-        // If draft-only or free tier, jump straight to success
-        if (mode === "save-draft" || tierId === "preview") {
-          setPaid(false);
-          goToStep("success");
-          return;
-        }
 
         // 2. Create Stripe checkout session
         const checkoutRes = await fetch("/api/checkout", {
@@ -213,7 +158,6 @@ export default function CreateWizard() {
       customerNote,
       answers,
       photos,
-      lyrics,
       goToStep,
     ]
   );
@@ -296,15 +240,6 @@ export default function CreateWizard() {
           <StepQuestions genre={genre} answers={answers} setAnswer={setAnswer} />
         )}
 
-        {step === "preview" && (
-          <StepPreview
-            loading={lyricsLoading}
-            error={lyricsError}
-            lyrics={lyrics}
-            onRegenerate={generateLyrics}
-          />
-        )}
-
         {step === "checkout" && (
           <StepCheckout
             selectedTier={selectedTier}
@@ -336,19 +271,9 @@ export default function CreateWizard() {
           </button>
 
           <div className="flex items-center gap-3">
-            {step === "checkout" && lyrics && (
-              <button
-                onClick={() => submitOrder("save-draft")}
-                disabled={submitting || !customerEmail.includes("@")}
-                className="text-sm text-cream-200/70 hover:text-gold-300 px-4 py-2 transition-colors"
-              >
-                Just email me the draft
-              </button>
-            )}
-
             {step === "checkout" ? (
               <button
-                onClick={() => submitOrder("checkout")}
+                onClick={() => submitOrder()}
                 disabled={submitting || !canAdvance}
                 className="btn-primary"
               >
@@ -365,7 +290,7 @@ export default function CreateWizard() {
                 disabled={!canAdvance}
                 className="btn-primary"
               >
-                {step === "preview" ? "I love it — what's next?" : "Continue"}
+                Continue
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
