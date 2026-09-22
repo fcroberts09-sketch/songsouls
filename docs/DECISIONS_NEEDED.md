@@ -20,4 +20,4 @@ Newest at the bottom. Resolved items move to the "Resolved" section with the dec
 
 | # | Decision | Outcome | Date |
 | --- | --- | --- | --- |
-| 1 | Where Parity lives | This repo, root. Aivre removed from the branch; preserved at tag `aivre-v1-final` (commit 843be1a). Repo is still named `songsouls`; rename is cosmetic and can wait for the product name (Q2). | 2026-09-22 |
+| 1 | Where Parity lives | This repo, root. Aivre removed from the branch; preserved in git history at commit 843be1a on `main` (tag `aivre-v1-final` must be pushed from the founder's machine; this session cannot push tags). Repo is still named `songsouls`; rename is cosmetic and can wait for the product name (Q2). | 2026-09-22 |
