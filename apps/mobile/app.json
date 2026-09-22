@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Parity",
+    "slug": "parity",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "scheme": "parity",
+    "newArchEnabled": true,
+    "ios": { "bundleIdentifier": "app.parity.placeholder", "supportsTablet": false },
+    "android": { "package": "app.parity.placeholder" },
+    "plugins": [],
+    "_comment": "Bundle identifiers are placeholders until the product name is chosen (DECISIONS_NEEDED #2). The share extension config plugin lands in Phase 1 and requires an EAS development build, not Expo Go."
+  }
+}

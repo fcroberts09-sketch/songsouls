@@ -1,0 +1,32 @@
+{
+  "name": "parity-monorepo",
+  "version": "0.0.1",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "pnpm build:packages && pnpm --filter @parity/api --filter @parity/extension run build",
+    "typecheck": "pnpm build:packages && pnpm -r run typecheck",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "pnpm build:packages && pnpm -r run test",
+    "test:unit": "pnpm build:packages && pnpm -r run test:unit",
+    "test:integration": "pnpm build:packages && pnpm --filter @parity/api run test:integration",
+    "db:migrate": "pnpm --filter @parity/api run db:migrate",
+    "db:seed": "pnpm --filter @parity/api run db:seed",
+    "db:reset": "pnpm --filter @parity/api run db:reset",
+    "dev:api": "pnpm --filter @parity/api run dev",
+    "build:packages": "pnpm -r --filter './packages/**' run build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^10.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.0.0"
+  }
+}

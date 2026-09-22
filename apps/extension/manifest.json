@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Parity (placeholder name)",
+  "version": "0.0.1",
+  "description": "Shows you the lowest price other shoppers were shown at the same retailer. No affiliate links, no data selling.",
+  "permissions": ["storage"],
+  "host_permissions": [],
+  "optional_host_permissions": [
+    "https://www.kroger.com/*",
+    "https://www.heb.com/*",
+    "https://www.walmart.com/*",
+    "https://www.instacart.com/*"
+  ],
+  "background": { "service_worker": "dist/background.js", "type": "module" },
+  "action": { "default_title": "Parity: check this price" },
+  "_comment": "Passive collection is OFF per domain until the user enables it (optional_host_permissions). Content scripts are registered at runtime only for enabled domains (Phase 1)."
+}

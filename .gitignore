@@ -14,3 +14,9 @@ coverage/
 
 # local tooling
 .claude/settings.local.json
+.env
+.turbo/
+*.log
+apps/mobile/.expo/
+apps/mobile/ios/
+apps/mobile/android/
