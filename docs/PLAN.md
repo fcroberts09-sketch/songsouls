@@ -1,6 +1,6 @@
 # Parity — Plan (gate 0: nothing gets built until this is answered)
 
-Status: **waiting on founder answers** (section 4). Written 2026-09-22 on branch `claude/new-session-870fte`.
+Status: **revised after research (see `docs/RESEARCH.md`); Phase 0 in progress on stated defaults.** Written 2026-09-22 on branch `claude/new-session-870fte`. Revision 2 changes are marked **[R2]**.
 
 Confidence tags used below: **[Certain]** hard evidence, **[Likely]** strong inference, **[Guessing]** filling a gap.
 
@@ -17,6 +17,8 @@ Confidence tags used below: **[Certain]** hard evidence, **[Likely]** strong inf
 **Rideshare in the pilot is demo-only.** [Likely] Uber and Lyft fare screens have no shareable URL, so capture is screenshot-only, and the product is a (origin cell, destination cell, tier, time bucket) tuple. Getting k ≥ 10 or even N ≥ 3 on one such tuple needs far more density than a 200-user pilot. Uber stays in the seed data as the service-tuple example and in Demo Mode. Real rideshare comparisons are a post-pilot outcome. I have not removed it from the plan; I have stopped pretending it produces pilot data.
 
 ---
+
+**[R2] What the research changed.** `docs/RESEARCH.md` confirms the mechanics above and adds four things: Instacart's item price tests ended Dec 2025 and were randomized tests, not targeting; every enacted law exempts promotions and loyalty, which is where personalization now lives; single-price flags are mostly noise, so the card must report distributions; and demand is strongest from plaintiffs' firms and regulators, not consumers. The revenue priority flips (evidence first, consumer app as the collection layer), the Phase 1 retailer list changes (Kroger API baseline first; Instacart and Uber are screenshot-only, no baseline), and incentive rules are now fixed in writing (section 3, items 8–12).
 
 ## 1. The product, restated
 
@@ -68,6 +70,16 @@ Legal
 
 7. **Free-tier limits keyed on `device_id` are resettable by reinstall.** Accepted risk in the brief's no-account model. I will not add an account requirement to fix it. Note it, move on.
 
+8. **[R2] Revenue priority flips: evidence and compliance first, consumer app as the collection layer.** Reason: RESEARCH.md finding 11. Evidence export moves from Phase 3 into Phase 2; RevenueCat and the paywall move to Phase 3. The consumer app stays free in the pilot with a paid tier treated as an experiment. Risk: investors who wanted a consumer subscription story. Answer: the regulatory clock (NJ private right of action Aug 2027, NY pending) is a better story.
+
+9. **[R2] Phase 1 retailers: Kroger (official API baseline), H-E-B and Walmart (counsel-gated baseline), Instacart and Uber (screenshot capture only, no baseline, ever).** Reason: RESEARCH.md finding 10. Instacart's robots.txt disallows everything and Uber's API forbids comparison use. Kroger's public product API is the only legally clean, store-localized price source and covers Houston and DFW.
+
+10. **[R2] The Result Card reports distributions and rates, never a single accusatory price.** "n price points seen today, you are at the p-th percentile, anonymous baseline $X, based on k devices in the last h hours; variation may be a randomized test." "Lowest seen" appears only at k ≥ 3 attested devices and decays after a configurable window. Reason: RESEARCH.md finding 4.
+
+11. **[R2] Incentive rules, fixed:** every check is a contribution; no cash per submission; no savings-share kickback; symbolic recognition and "your data helped n people"; store or metro unlock thresholds instead of per-user gates; contribution never gated by payment and never optional for paid users. Reason: RESEARCH.md findings 5–7.
+
+12. **[R2] The baseline fetcher is governed by `docs/CLEANROOM_POLICY.md` and the policy is enforced in code**, including robots.txt parsing per RFC 9309, automatic domain disable on `Disallow: /`, a 24-hour hard stop on any challenge page, identified user agent with contact address, on-demand only, and control-twin sessions so the noise floor is measured. Reason: RESEARCH.md findings 9 and 10.
+
 Everything else in the brief I intend to follow as written.
 
 ---
@@ -82,13 +94,13 @@ Everything else in the brief I intend to follow as written.
 
 4. **Hosting.** Confirm the brief's default (Fly.io for API and workers, Neon Postgres, Upstash Redis, Cloudflare R2) plus my change to plain partitioned Postgres (section 3, item 3). Or say "AWS from day one" and I will write the Terraform for ECS, RDS, ElastiCache, and S3 instead. Either is fine; switching later costs about a week.
 
-5. **Clean-room baseline fetch in Phase 1.** Approve or reject the off-by-default minimal version described in section 3, item 2. If approved, which domains may be enabled for internal testing first? If rejected, understand that mobile checks at pilot scale will mostly return "not enough data" until the network is dense.
+5. **Baseline sources.** [R2] Kroger's official API needs no approval beyond registering a developer account, so I am building it. H-E-B and Walmart scraping stay off until counsel signs off (question 9). Walmart's API requires joining its affiliate program; say whether membership without ever placing an affiliate link is acceptable for the brand.
 
-6. **Phase 1 retailers.** I propose H-E-B, Instacart, Walmart, and Kroger for web parser recipes and screenshot extraction, with Uber as synthetic seed and Demo Mode only. Object or confirm.
+6. **Phase 1 retailers.** [R2] Kroger, H-E-B, Walmart, Instacart for parser recipes and screenshot extraction; baselines only per question 5; Uber screenshot-only and synthetic seed. Object or confirm.
 
 7. **LLM vendor and monthly budget cap** for screenshot extraction and identity adjudication. Now a Phase 1 dependency (section 3, item 1). If you have no preference, I will pick one in an ADR and default the cap to a low number with a hard stop.
 
-8. **Paid tier price, and acceptance of device-keyed free-tier limits** (section 3, item 7).
+8. **[R2] Confirm the revenue flip** (section 3, item 8): evidence and compliance products first, consumer app free in the pilot, paid tier as a later experiment. If you disagree, say so and I will keep the brief's ordering.
 
 9. **Counsel.** Is someone identified for privacy policy, ToS, the clean-room policy, and retailer letters? Until then everything legally sensitive ships behind a flag defaulting off and is listed in `docs/DECISIONS_NEEDED.md`.
 
@@ -114,9 +126,10 @@ Timelines below are yours, not mine. My throughput is not the bottleneck; the ac
 - Integrity v1: plausibility, corroboration N ≥ 3, velocity, content hash and HMAC per device key, quarantine queue.
 - Aggregation v1: worker-maintained `aggregates_daily` with dispersion score; Redis card cache.
 - **Screenshot extraction v1** (moved in): vision model with strict schema and confidence; screenshot kept as evidence.
-- **Clean-room baseline v1** (moved in, off by default): as scoped in section 3.
+- **Baseline v1** [R2]: Kroger API adapter (on), plus the generic clean-room fetcher with policy enforcement, control twins, and per-domain flags defaulting off for H-E-B and Walmart.
 - Mobile: onboarding, share extension (URL and screenshot), Result Card with "you vs. baseline vs. network", Playbook, My Checks, Demo Mode.
 - Chrome extension: passive collector for the seed retailers with selector recipes and HTML fixtures; inline check.
+- **[R2] Symbolic contribution feedback** on every check ("your check updated n prices in Houston").
 - Admin: parser recipe editor, playbook editor, integrity review queue, feature flags.
 - Demo checkpoint: founder screenshots an H-E-B item, shares it, and gets a card with a lower observed offer and a playbook, on stage, in Demo Mode. Also works on real data whenever the baseline flag is on for that domain.
 - Blocked by: questions 3 (phone build), 5, 7.
@@ -126,7 +139,8 @@ Timelines below are yours, not mine. My throughput is not the bottleneck; the ac
 - On-device OCR pre-pass; PII redaction step before storage.
 - Clean-room scale-out: IP pool, per-domain concurrency, cost guardrails. Rideshare screenshot extraction for the service-tuple path.
 - Edge rate limits; load test `POST /check` to 1k RPS with p95 under 300 ms; document results.
-- Watches and push alerts. RevenueCat subscription with free-tier limits.
+- Watches and push alerts.
+- **[R2] Evidence Export v1** (moved in from Phase 3): PDF and CSV, k ≥ 10, methodology page with noise-floor statement.
 - Safari Web Extension packaging.
 - Data subject export and delete endpoints. Retention jobs.
 - Blocked by: question 3 entirely.
@@ -135,6 +149,7 @@ Timelines below are yours, not mine. My throughput is not the bottleneck; the ac
 - Dispersion dashboard with the household-cost model and its documented assumptions.
 - Evidence Export (PDF and CSV, k ≥ 10, methodology page). NY disclosure audit report.
 - Public read-only aggregate API with keys and quotas; OpenAPI spec.
+- **[R2] RevenueCat paid tier as an experiment** (moved out from Phase 2); ground-truth panel protocol.
 - `docs/INVESTOR_DEMO.md` and `docs/METRICS.md`.
 
 ### Phase 4 — Pilot launch readiness
