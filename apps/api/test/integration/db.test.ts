@@ -111,6 +111,22 @@ describe('seed', () => {
       FROM aggregates_daily a JOIN retailers r ON r.id = a.retailer_id WHERE r.slug = 'kroger' AND a.n >= 3`;
     expect(Number(share)).toBeGreaterThan(0.5);
   });
+  it('has spotlight cells dense enough for the demo (n >= 10, several price points, baseline present)', async () => {
+    const rows =
+      await sql`SELECT n, n_devices, n_price_points, baseline_price FROM aggregates_daily WHERE metro = 'HOU' AND n >= 10`;
+    expect(rows.length).toBeGreaterThanOrEqual(5);
+    for (const r of rows) {
+      expect(r.n_devices).toBeGreaterThanOrEqual(3);
+      expect(r.n_price_points).toBeGreaterThanOrEqual(3);
+    }
+    expect(rows.some((r) => r.baseline_price !== null)).toBe(true);
+  });
+  it('label breakdown counts sum to n for every aggregate', async () => {
+    const [{ bad }] = await sql`
+      SELECT count(*)::int AS bad FROM aggregates_daily a
+      WHERE (SELECT coalesce(sum(value::int), 0) FROM jsonb_each_text(a.label_breakdown_json)) <> a.n`;
+    expect(bad).toBe(0);
+  });
   it('is idempotent: re-seeding leaves the same counts', async () => {
     await seed(config.DATABASE_URL, () => {});
     const [o] =
