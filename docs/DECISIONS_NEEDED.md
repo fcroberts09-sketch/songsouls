@@ -6,7 +6,6 @@ Newest at the bottom. Resolved items move to the "Resolved" section with the dec
 
 | # | Decision | Blocks | Raised |
 | --- | --- | --- | --- |
-| 1 | Where Parity lives: new repo (recommended), Aivre moved aside here, or a `parity/` subdirectory | Phase 0 | 2026-09-22, `docs/PLAN.md` Q1 |
 | 2 | Product name and domain | bundle IDs, bot UA, legal drafts | PLAN Q2 |
 | 3 | Apple Developer, Google Play, EAS accounts | phone builds, Phase 2 | PLAN Q3 |
 | 4 | Hosting: Fly + Neon + Upstash + R2 vs AWS; confirm plain partitioned Postgres over Timescale | Phase 0 ADRs | PLAN Q4 |
@@ -19,4 +18,6 @@ Newest at the bottom. Resolved items move to the "Resolved" section with the dec
 
 ## Resolved
 
-(none yet)
+| # | Decision | Outcome | Date |
+| --- | --- | --- | --- |
+| 1 | Where Parity lives | This repo, root. Aivre removed from the branch; preserved at tag `aivre-v1-final` (commit 843be1a). Repo is still named `songsouls`; rename is cosmetic and can wait for the product name (Q2). | 2026-09-22 |
